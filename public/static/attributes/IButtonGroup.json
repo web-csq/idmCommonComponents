@@ -19,6 +19,7 @@
             "type": "group",
             "text": "基本属性",
             "desc": "提供设置组件能达到展示效果的基本属性设置信息",
+            "display": "@[false]",
             "children": []
         },
         {
@@ -38,6 +39,7 @@
                     "type": "input",
                     "layoutType": "inline",
                     "text": "按钮文本",
+                    "iconSize": 16,
                     "bindKey": "btnText",
                     "default": "按钮"
                 },
@@ -56,7 +58,8 @@
                             "type": "inputNumber",
                             "layoutType": "inline",
                             "text": "图标尺寸",
-                            "bindKey": "iconSize"
+                            "bindKey": "iconSize",
+                            "default": 16
                         },
                         {
                             "type": "colorPicker",

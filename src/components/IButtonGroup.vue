@@ -1,7 +1,7 @@
 <template>
-  <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="idm-button-group-container">
+  <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="d-flex align-c">
     <template v-for="item, index in propData.buttonList">
-      <div :key="index" class="button-container" :style="handleGetBtnStyle(item)" @click="handleButtonClick(item)"
+      <div :key="index" class="d-flex align-c cursor-p" :style="handleGetBtnStyle(item)" @click="handleButtonClick(item)"
         v-if="handleButtonShow(item)">
         <svg v-if="item.icon && item.icon.length" :style="handleGetIconStyle(item)" class="btn-left-icon"
           aria-hidden="true">
@@ -120,16 +120,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-.idm-button-group-container {
-  display: flex;
-  align-items: center;
-}
-
-.button-container {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-</style>
