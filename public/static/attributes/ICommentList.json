@@ -1,0 +1,505 @@
+{
+    "classId": "idm.component.idmCommonComponent.icommentlist",
+    "comName": "评论组件",
+    "className": "ICommentList",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "唯一标识",
+            "bindKey": "ctrlId",
+            "disabled": true,
+            "default": "@[packageid]",
+            "desc": "",
+            "helpUrl": ""
+        },
+        {
+            "type": "group",
+            "text": "基本属性",
+            "desc": "提供设置组件能达到展示效果的基本属性设置信息",
+            "children": [
+                {
+                    "type": "radio",
+                    "styleType": "radio",
+                    "layoutType": "inline",
+                    "text": "评论头像",
+                    "bindKey": "isShowAvatar",
+                    "default": true,
+                    "dictionary": [
+                        {
+                            "label": "显示",
+                            "value": true
+                        },
+                        {
+                            "label": "隐藏",
+                            "value": false
+                        }
+                    ]
+                },
+                {
+                    "type": "radio",
+                    "styleType": "radio",
+                    "layoutType": "inline",
+                    "text": "点赞数量",
+                    "bindKey": "isFabulousNumber",
+                    "default": true,
+                    "dictionary": [
+                        {
+                            "label": "显示",
+                            "value": true
+                        },
+                        {
+                            "label": "隐藏",
+                            "value": false
+                        }
+                    ]
+                },
+                {
+                    "type": "checkbox",
+                    "layoutType": "inline",
+                    "text": "排序显示",
+                    "bindKey": "sortType",
+                    "default": [1],
+                    "dictionary": [
+                        {
+                            "label": "按时间排序",
+                            "value": 1
+                        },
+                        {
+                            "label": "按点赞排序",
+                            "value": 2
+                        }
+                    ]
+                },
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "评论条数",
+                    "desc": "一级评论展示条数",
+                    "bindKey": "showNum",
+                    "default": 10
+                },
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "子评条数",
+                    "desc": "子级评论默认展示条数",
+                    "bindKey": "childShowNum",
+                    "default": 2
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "样式设置",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "内外边距",
+                    "bindKey": "box",
+                    "default": {
+                        "marginTopVal": "",
+                        "marginRightVal": "",
+                        "marginBottomVal": "",
+                        "marginLeftVal": "",
+                        "paddingTopVal": "20px",
+                        "paddingRightVal": "20px",
+                        "paddingBottomVal": "20px",
+                        "paddingLeftVal": "20px"
+                    }
+                },
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "子项边距",
+                    "desc": "设置评论子项的内外边距",
+                    "bindKey": "subBox",
+                    "default": {
+                        "marginTopVal": "20px",
+                        "marginRightVal": "",
+                        "marginBottomVal": "",
+                        "marginLeftVal": "70px",
+                        "paddingTopVal": "10px",
+                        "paddingRightVal": "0",
+                        "paddingBottomVal": "10px",
+                        "paddingLeftVal": "20px"
+                    }
+                },
+                {
+                    "type": "inlineGroup",
+                    "text": "宽高",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "宽",
+                            "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                            "bindKey": "width",
+                            "width": "60px",
+                            "default": "100%"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "高",
+                            "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                            "bindKey": "height",
+                            "width": "60px",
+                            "default": "auto"
+                        }
+                    ]
+                },
+                {
+                    "type": "border",
+                    "layoutType": "block",
+                    "text": "边框",
+                    "bindKey": "border"
+                },
+                {
+                    "type": "group",
+                    "text": "头像样式",
+                    "layoutType": "block",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "宽",
+                            "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                            "bindKey": "avatarWidth",
+                            "default": "50px"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "高",
+                            "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                            "bindKey": "avatarHeight",
+                            "default": "50px"
+                        },
+                        {
+                            "type": "border",
+                            "layoutType": "block",
+                            "text": "边框",
+                            "bindKey": "avatarBorder",
+                            "default": {
+                                "border": {
+                                    "top": {
+                                        "style": "",
+                                        "width": 0,
+                                        "widthUnit": "px",
+                                        "colors": {}
+                                    },
+                                    "right": {
+                                        "style": "",
+                                        "width": 0,
+                                        "widthUnit": "px",
+                                        "colors": {}
+                                    },
+                                    "bottom": {
+                                        "style": "",
+                                        "width": 0,
+                                        "widthUnit": "px",
+                                        "colors": {}
+                                    },
+                                    "left": {
+                                        "style": "",
+                                        "width": 0,
+                                        "widthUnit": "px",
+                                        "colors": {}
+                                    }
+                                },
+                                "radius": {
+                                    "leftTop": {
+                                        "radius": 50,
+                                        "radiusUnit": "px"
+                                    },
+                                    "rightTop": {
+                                        "radius": 50,
+                                        "radiusUnit": "px"
+                                    },
+                                    "leftBottom": {
+                                        "radius": 50,
+                                        "radiusUnit": "px"
+                                    },
+                                    "rightBottom": {
+                                        "radius": 50,
+                                        "radiusUnit": "px"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "type": "box",
+                            "layoutType": "block",
+                            "text": "内外边距",
+                            "bindKey": "avatarBox",
+                            "default": {
+                                "marginTopVal": "10px",
+                                "marginRightVal": "20px",
+                                "marginBottomVal": "",
+                                "marginLeftVal": "",
+                                "paddingTopVal": "",
+                                "paddingRightVal": "",
+                                "paddingBottomVal": "",
+                                "paddingLeftVal": ""
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "text": "单项评论样式",
+                    "layoutType": "block",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "输入框宽",
+                            "bindKey": "inputWidth",
+                            "desc": "设置评论输入框的宽度",
+                            "default": "500px"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "文字间隔",
+                            "bindKey": "textMargin",
+                            "desc": "设置单项评论文字的间隔",
+                            "default": "10px"
+                        },
+                        {
+                            "type": "border",
+                            "layoutType": "block",
+                            "text": "边框",
+                            "bindKey": "itemBorder",
+                            "default": {
+                                "border": {
+                                    "top": {
+                                        "style": "solid",
+                                        "width": 1,
+                                        "widthUnit": "px",
+                                        "colors": {
+                                            "hex": "#BEBCBC",
+                                            "hex8": "#BEBCBCFF"
+                                        }
+                                    },
+                                    "right": {
+                                        "style": "",
+                                        "width": 0,
+                                        "widthUnit": "px",
+                                        "colors": {}
+                                    },
+                                    "bottom": {
+                                        "style": "",
+                                        "width": 0,
+                                        "widthUnit": "px",
+                                        "colors": {}
+                                    },
+                                    "left": {
+                                        "style": "",
+                                        "width": 0,
+                                        "widthUnit": "px",
+                                        "colors": {}
+                                    }
+                                },
+                                "radius": {
+                                    "leftTop": {
+                                        "radius": 0,
+                                        "radiusUnit": "px"
+                                    },
+                                    "rightTop": {
+                                        "radius": 0,
+                                        "radiusUnit": "px"
+                                    },
+                                    "leftBottom": {
+                                        "radius": 0,
+                                        "radiusUnit": "px"
+                                    },
+                                    "rightBottom": {
+                                        "radius": 0,
+                                        "radiusUnit": "px"
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "type": "box",
+                            "layoutType": "block",
+                            "text": "内外边距",
+                            "bindKey": "itemBox",
+                            "default": {
+                                "marginTopVal": "",
+                                "marginRightVal": "",
+                                "marginBottomVal": "",
+                                "marginLeftVal": "",
+                                "paddingTopVal": "20px",
+                                "paddingRightVal": "",
+                                "paddingBottomVal": "20px",
+                                "paddingLeftVal": ""
+                            }
+                        }
+                    ]
+                },
+                {
+                    "type": "font",
+                    "text": "昵称文字",
+                    "layoutType": "block",
+                    "bindKey": "userNameFont",
+                    "default": {
+                        "fontColors": {
+                            "hex": "#577EF1",
+                            "hex8": "#577EF1FF"
+                        }
+                    }
+                },
+                {
+                    "type": "font",
+                    "text": "精选发言",
+                    "layoutType": "block",
+                    "bindKey": "selectSpeechFont",
+                    "default": {
+                        "fontColors": {}
+                    }
+                },
+                {
+                    "type": "font",
+                    "text": "作者文字",
+                    "layoutType": "block",
+                    "bindKey": "authorFont",
+                    "default": {
+                        "fontColors": {},
+                        "fontSize": 13,
+                        "fontSizeUnit": "px"
+                    }
+                }
+            ]
+        },
+        {
+            "type": "table",
+            "text": "主题设置",
+            "desc": "点击？查看主题设置用法指南",
+            "bindKey": "themeList",
+            "tabText": "主题[index]",
+            "default": [
+                {
+                    "key": "blue",
+                    "mainColor": {
+                        "hex": "#0073CA",
+                        "hex8": "#0073CAFF"
+                    }
+                },
+                {
+                    "key": "red",
+                    "mainColor": {
+                        "hex": "#E21A1A",
+                        "hex8": "#E21A1AFF"
+                    }
+                },
+                {
+                    "key": "green",
+                    "mainColor": {
+                        "hex": "#0EAF64",
+                        "hex8": "#0EAF64FF"
+                    }
+                }
+            ],
+            "children": [
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "主题标识",
+                    "bindKey": "key",
+                    "multiple": false,
+                    "desc": "用于设置主题的标识，此项需要搭配自定义开发切换主题的功能，例如：蓝色标识为blue，用户切换主题的时候存储到数据库中的标识为blue，则这里填写为blue",
+                    "default": "",
+                    "placeholder": "例如：blue",
+                    "ctrlAttrObject": {
+                        "mode": "combobox"
+                    },
+                    "dictionary": [
+                        {
+                            "label": "blue",
+                            "value": "blue"
+                        },
+                        {
+                            "label": "red",
+                            "value": "red"
+                        },
+                        {
+                            "label": "green",
+                            "value": "green"
+                        }
+                    ]
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "主要颜色",
+                    "bindKey": "mainColor",
+                    "desc": "主题的主要颜色",
+                    "placeholder": "请选择颜色",
+                    "display": "@[key]"
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看高级设置用法指南",
+            "children": [
+                {
+                    "type": "group",
+                    "text": "功能接口",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "评论列表",
+                            "bindKey": "commentListInterface",
+                            "desc": "请求方法：get",
+                            "default": "/ctrl/website/api/comment"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "评论添加",
+                            "bindKey": "addCommentInterface",
+                            "desc": "请求方法：post",
+                            "default": "/ctrl/website/api/comment"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "评论删除",
+                            "bindKey": "deleteCommentInterface",
+                            "desc": "",
+                            "default": "/ctrl/website/api/deleteComment"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "评论点赞",
+                            "bindKey": "likeCommentInterface",
+                            "desc": "",
+                            "default": "/ctrl/website/api/comment/like"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "inline",
+                            "text": "取消点赞",
+                            "bindKey": "unLikeCommentInterface",
+                            "desc": "",
+                            "default": "/ctrl/website/api/comment/deleteLike"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+      

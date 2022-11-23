@@ -1,0 +1,168 @@
+{
+    "classId": "idm.component.idmCommonComponent.ibuttongroup",
+    "comName": "按钮组",
+    "className": "IButtonGroup",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "唯一标识",
+            "bindKey": "ctrlId",
+            "disabled": true,
+            "default": "@[packageid]",
+            "desc": "",
+            "helpUrl": ""
+        },
+        {
+            "type": "group",
+            "text": "基本属性",
+            "desc": "提供设置组件能达到展示效果的基本属性设置信息",
+            "children": []
+        },
+        {
+            "type": "table",
+            "text": "按钮组",
+            "tabText": "按钮[index]",
+            "bindKey": "buttonList",
+            "desc": "",
+            "default": [
+                {
+                    "btnText": "按钮",
+                    "btnType": "default"
+                }
+            ],
+            "children": [
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "按钮文本",
+                    "bindKey": "btnText",
+                    "default": "按钮"
+                },
+                {
+                    "type": "group",
+                    "layoutType": "block",
+                    "text": "图标属性",
+                    "children": [
+                        {
+                            "type": "iconSelect",
+                            "layoutType": "inline",
+                            "text": "选择图标",
+                            "bindKey": "icon"
+                        },
+                        {
+                            "type": "inputNumber",
+                            "layoutType": "inline",
+                            "text": "图标尺寸",
+                            "bindKey": "iconSize"
+                        },
+                        {
+                            "type": "colorPicker",
+                            "layoutType": "inline",
+                            "text": "图标颜色",
+                            "bindKey": "iconColor"
+                        },
+                        {
+                            "type": "box",
+                            "layoutType": "block",
+                            "text": "图标边距",
+                            "bindKey": "iconBox"
+                        }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "layoutType": "block",
+                    "text": "样式属性",
+                    "children": [
+                        {
+                            "type": "box",
+                            "layoutType": "block",
+                            "text": "边距",
+                            "bindKey": "btnBox"
+                        },
+                        {
+                            "type": "border",
+                            "layoutType": "block",
+                            "text": "边框",
+                            "bindKey": "btnBorder"
+                        },
+                        {
+                            "type": "font",
+                            "layoutType": "block",
+                            "text": "文字",
+                            "bindKey": "btnFont"
+                        }
+                    ]
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "显示函数",
+                    "bindKey": "showFunction",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "点击事件",
+                    "bindKey": "clickFunction",
+                    "multiple": false
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "样式设置",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "inlineGroup",
+                    "text": "宽高",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "宽",
+                            "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                            "bindKey": "width",
+                            "width": "60px",
+                            "default": "100%"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "高",
+                            "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                            "bindKey": "height",
+                            "width": "60px",
+                            "default": "auto"
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "内外边距",
+                    "bindKey": "box"
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "背景色",
+                    "bindKey": "bgColor",
+                    "placeholder": "请选择颜色"
+                },
+                {
+                    "type": "border",
+                    "layoutType": "block",
+                    "text": "边框",
+                    "bindKey": "border"
+                }
+            ]
+        }
+    ]
+}
