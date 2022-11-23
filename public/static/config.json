@@ -1,0 +1,22 @@
+{
+  "version": "1.0.0",
+  "lasttime": "2022-11-23 11:48:23",
+  "author": "申龙",
+  "className": "basics",
+  "module": [
+    {
+      "classId": "idm.component.basics.text",
+      "comName": "文本",
+      "className": "IText",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.component.basics.icommonlist",
+      "comName": "评论列表",
+      "className": "ICommonList",
+      "comType": "common",
+      "comLangue": "vue"
+    }
+  ]
+}
