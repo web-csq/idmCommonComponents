@@ -31,7 +31,8 @@
             "default": [
                 {
                     "btnText": "按钮",
-                    "btnType": "default"
+                    "btnType": "default",
+                    "iconSize": 16
                 }
             ],
             "children": [
@@ -39,7 +40,6 @@
                     "type": "input",
                     "layoutType": "inline",
                     "text": "按钮文本",
-                    "iconSize": 16,
                     "bindKey": "btnText",
                     "default": "按钮"
                 },
