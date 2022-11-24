@@ -88,6 +88,22 @@
                     "desc": "子级评论默认展示条数",
                     "bindKey": "childShowNum",
                     "default": 2
+                },
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "评论字数",
+                    "desc": "限制发布评论的最大字数",
+                    "bindKey": "maxLength",
+                    "default": 500
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "占位文本",
+                    "desc": "设置输入评论的textarea的placeholder属性",
+                    "bindKey": "textareaPlaceholder",
+                    "default": "快来说说你的想法吧~"
                 }
             ]
         },
@@ -128,6 +144,17 @@
                         "paddingRightVal": "0",
                         "paddingBottomVal": "10px",
                         "paddingLeftVal": "20px"
+                    }
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "子项背景",
+                    "desc": "设置评论子项的背景颜色",
+                    "bindKey": "subBoxBg",
+                    "default": {
+                        "hex": "#DDDDDD",
+                        "hex8": "#DDDDDDFF"
                     }
                 },
                 {
@@ -453,53 +480,13 @@
             "desc": "点击？查看高级设置用法指南",
             "children": [
                 {
-                    "type": "group",
-                    "text": "功能接口",
-                    "children": [
-                        {
-                            "type": "input",
-                            "layoutType": "inline",
-                            "text": "评论列表",
-                            "bindKey": "commentListInterface",
-                            "desc": "请求方法：get",
-                            "default": "/ctrl/website/api/comment"
-                        },
-                        {
-                            "type": "input",
-                            "layoutType": "inline",
-                            "text": "评论添加",
-                            "bindKey": "addCommentInterface",
-                            "desc": "请求方法：post",
-                            "default": "/ctrl/website/api/comment"
-                        },
-                        {
-                            "type": "input",
-                            "layoutType": "inline",
-                            "text": "评论删除",
-                            "bindKey": "deleteCommentInterface",
-                            "desc": "",
-                            "default": "/ctrl/website/api/deleteComment"
-                        },
-                        {
-                            "type": "input",
-                            "layoutType": "inline",
-                            "text": "评论点赞",
-                            "bindKey": "likeCommentInterface",
-                            "desc": "",
-                            "default": "/ctrl/website/api/comment/like"
-                        },
-                        {
-                            "type": "input",
-                            "layoutType": "inline",
-                            "text": "取消点赞",
-                            "bindKey": "unLikeCommentInterface",
-                            "desc": "",
-                            "default": "/ctrl/website/api/comment/deleteLike"
-                        }
-                    ]
+                    "type": "dataSourceSelect",
+                    "layoutType": "inline",
+                    "text": "数据源",
+                    "bindKey": "dataSource",
+                    "desc": "组件数据源，详细用法见文档"
                 }
             ]
         }
     ]
 }
-      

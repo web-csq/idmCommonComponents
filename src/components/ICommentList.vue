@@ -1,7 +1,11 @@
 <template>
   <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
-    <a-textarea placeholder="评论请登录" maxLength="512" :auto-size="{ minRows: 3, maxRows: 5 }" allowClear
-      v-model="content" />
+    <div class="textarea-wrapper">
+      <a-textarea class="m-textarea" :placeholder="propData.textareaPlaceholder" :maxLength="propData.maxLength"
+        :auto-size="{ minRows: 3, maxRows: 5 }" allowClear v-model="content" />
+      <span class="m-count">{{ textLength }}/{{ propData.maxLength }}</span>
+    </div>
+
     <div class="d-flex flex-d-r-r align-c comment-list-button-container">
       <a-button type="primary" @click="handlePublish" style="margin: 0 0 0 20px">发布</a-button>
       <a-select style="width: 140px" v-if="componentSortTypeList.length > 0" :disabled="moduleObject.env === 'develop'"
@@ -50,9 +54,7 @@ export default {
   data() {
     return {
       moduleObject: {},
-      propData: this.$root.propData.compositeAttr || {
-        fontContent: 'Hello Word'
-      },
+      propData: this.$root.propData.compositeAttr || {},
       componentData: {
         rows: [],
         authorId: '123'
@@ -64,6 +66,11 @@ export default {
       currentPage: 1,
       userInfo: IDM.user.getCurrentUserInfo()
     }
+  },
+  computed: {
+    textLength() {
+      return (this.content || "").length;
+    },
   },
   created() {
     this.moduleObject = this.$root.moduleObject
@@ -90,37 +97,73 @@ export default {
       this.convertAttrToStyleObject()
       this.convertThemeListAttrToStyleObject()
     },
+    handleDataSourceFunction(param) {
+      return new Promise((resolve, reject) => {
+        IDM.datasource.request(this.propData?.dataSource?.[0]?.id, {
+          moduleObject: this.moduleObject,
+          param
+        }, (res) => {
+          if (res.code == 200) {
+            resolve(res)
+          } else {
+            IDM.message.error(res.message)
+          }
+        }, (err) => {
+          reject(err)
+        })
+      })
+    },
     handleBlur() {
       // const arr = _.cloneDeep(this.componentData.rows)
       // this.setIsReplyFalse(arr)
       // this.$set(this.componentData, 'rows', arr)
     },
     handleSubClickMore(item, index) {
-      this.propData.commentListInterface &&
-        window.IDM.http
-          .get(this.propData.commentListInterface, {
-            ...this.commonParam(),
-            showLike: this.propData.isFabulousNumber,
-            page: this.currentPage,
-            commentId: item.id,
-            sortDir: this.currentSort,
-            showNum: 100,
-            showAvatar: this.propData.isShowAvatar
-          })
-          .then((res) => {
-            if (res.status == 200 && res.data.code == 200) {
-              item.isShowMore = false
-              item.children = res.data.data.rows
+      this.handleDataSourceFunction({
+        type: 'list',
+        params: {
+          ...this.commonParam(),
+          showLike: this.propData.isFabulousNumber,
+          page: this.currentPage,
+          commentId: item.id,
+          sortDir: this.currentSort,
+          showNum: 1000,
+          showAvatar: this.propData.isShowAvatar
+        }
+      }).then(res => {
+        item.isShowMore = false
+        item.children = res.data.rows
 
-              this.$set(this.componentData['rows'], index, item)
-              const arr = _.cloneDeep(this.componentData.rows)
-              this.setIsReplyFalse(arr)
-              this.$set(this.componentData, 'rows', arr)
-            } else {
-              IDM.message.error(res.data.message)
-            }
-          })
-          .catch(function (error) { })
+        this.$set(this.componentData['rows'], index, item)
+        const arr = _.cloneDeep(this.componentData.rows)
+        this.setIsReplyFalse(arr)
+        this.$set(this.componentData, 'rows', arr)
+      })
+      // this.propData.commentListInterface &&
+      //   window.IDM.http
+      //     .get(this.propData.commentListInterface, {
+      //       ...this.commonParam(),
+      //       showLike: this.propData.isFabulousNumber,
+      //       page: this.currentPage,
+      //       commentId: item.id,
+      //       sortDir: this.currentSort,
+      //       showNum: 100,
+      //       showAvatar: this.propData.isShowAvatar
+      //     })
+      //     .then((res) => {
+      //       if (res.status == 200 && res.data.code == 200) {
+      //         item.isShowMore = false
+      //         item.children = res.data.data.rows
+
+      //         this.$set(this.componentData['rows'], index, item)
+      //         const arr = _.cloneDeep(this.componentData.rows)
+      //         this.setIsReplyFalse(arr)
+      //         this.$set(this.componentData, 'rows', arr)
+      //       } else {
+      //         IDM.message.error(res.data.message)
+      //       }
+      //     })
+      //     .catch(function (error) { })
     },
     // 显示回复
     showReply({ index, sIndex }) {
@@ -141,31 +184,54 @@ export default {
       if (this.moduleObject.env == 'develop') {
         return
       }
-      const requestUrl = item.isLike ? this.propData.unLikeCommentInterface : this.propData.likeCommentInterface
-      requestUrl &&
-        window.IDM.http.post(requestUrl, {
+      const type = item.isLike ? 'unLike' : 'like'
+      this.handleDataSourceFunction({
+        type,
+        params: {
           ...this.commonParam(),
-          commentId: item.id
-        })
-          .then((res) => {
-            if (res.status == 200 && res.data.code == 200) {
-              if (item.isLike) {
-                item.likeNum--
-              } else {
-                item.likeNum++
-              }
-              item.isLike = !item.isLike
-              if (sIndex === -1) {
-                this.$set(this.componentData['rows'], index, item)
-              } else {
-                this.$set(this.componentData['rows'][index].children, sIndex, item)
-              }
-              IDM.message.success(res.data.message)
-              return
-            }
-            IDM.message.error(res.data.message)
-          })
-          .catch(function (error) { })
+          commentId: item.id,
+        }
+      }).then(res => {
+        if (item.isLike) {
+          item.likeNum--
+        } else {
+          item.likeNum++
+        }
+        item.isLike = !item.isLike
+        if (sIndex === -1) {
+          this.$set(this.componentData['rows'], index, item)
+        } else {
+          this.$set(this.componentData['rows'][index].children, sIndex, item)
+        }
+        IDM.message.success(res.message)
+      })
+
+
+      // const requestUrl = item.isLike ? this.propData.unLikeCommentInterface : this.propData.likeCommentInterface
+      // requestUrl &&
+      //   window.IDM.http.post(requestUrl, {
+      //     ...this.commonParam(),
+      //     commentId: item.id
+      //   })
+      //     .then((res) => {
+      //       if (res.status == 200 && res.data.code == 200) {
+      //         if (item.isLike) {
+      //           item.likeNum--
+      //         } else {
+      //           item.likeNum++
+      //         }
+      //         item.isLike = !item.isLike
+      //         if (sIndex === -1) {
+      //           this.$set(this.componentData['rows'], index, item)
+      //         } else {
+      //           this.$set(this.componentData['rows'][index].children, sIndex, item)
+      //         }
+      //         IDM.message.success(res.data.message)
+      //         return
+      //       }
+      //       IDM.message.error(res.data.message)
+      //     })
+      //     .catch(function (error) { })
     },
     // 删除
     handleDelete({ item, index, sIndex }) {
@@ -178,27 +244,45 @@ export default {
         okText: '确定',
         cancelText: '取消',
         onOk: () => {
-          this.propData.deleteCommentInterface &&
-            window.IDM.http
-              .post(this.propData.deleteCommentInterface, {
-                ...this.commonParam(),
-                commentId: item.id
-              })
-              .then((res) => {
-                if (res.status == 200 && res.data.code == 200) {
-                  const arr = _.cloneDeep(this.componentData.rows)
-                  if (sIndex === -1) {
-                    arr.splice(index, 1)
-                  } else {
-                    arr[index].children.splice(sIndex, 1)
-                  }
-                  this.$set(this.componentData, 'rows', arr)
-                  IDM.message.success(res.data.message)
-                  return
-                }
-                IDM.message.error(res.data.message)
-              })
-              .catch(function (error) { })
+          this.handleDataSourceFunction({
+            type: 'delete',
+            params: {
+              ...this.commonParam(),
+              commentId: item.id,
+            }
+          }).then(res => {
+            const arr = _.cloneDeep(this.componentData.rows)
+            if (sIndex === -1) {
+              arr.splice(index, 1)
+            } else {
+              arr[index].children.splice(sIndex, 1)
+            }
+            this.$set(this.componentData, 'rows', arr)
+            IDM.message.success(res.message)
+          })
+
+
+          // this.propData.deleteCommentInterface &&
+          //   window.IDM.http
+          //     .post(this.propData.deleteCommentInterface, {
+          //       ...this.commonParam(),
+          //       commentId: item.id
+          //     })
+          //     .then((res) => {
+          //       if (res.status == 200 && res.data.code == 200) {
+          //         const arr = _.cloneDeep(this.componentData.rows)
+          //         if (sIndex === -1) {
+          //           arr.splice(index, 1)
+          //         } else {
+          //           arr[index].children.splice(sIndex, 1)
+          //         }
+          //         this.$set(this.componentData, 'rows', arr)
+          //         IDM.message.success(res.data.message)
+          //         return
+          //       }
+          //       IDM.message.error(res.data.message)
+          //     })
+          //     .catch(function (error) { })
         },
         onCancel() {
           console.log('Cancel')
@@ -214,29 +298,44 @@ export default {
       })
     },
     addComment(content, commentId, cb) {
-      if (!this.userInfo.userid) {
+      if (!this.userInfo?.userid) {
         return IDM.message.warning('请先登录')
       }
       if (!content) {
         return
       }
-      this.propData.addCommentInterface &&
-        window.IDM.http
-          .post(this.propData.addCommentInterface, {
-            ...this.commonParam(),
-            content,
-            commentId,
-            showAvatar: false
-          })
-          .then((res) => {
-            if (res.status == 200 && res.data.code == 200) {
-              IDM.message.success(res.data.message)
-              cb()
-              return
-            }
-            IDM.message.error(res.data.message)
-          })
-          .catch(function (error) { })
+
+      this.handleDataSourceFunction({
+        type: 'submit',
+        params: {
+          ...this.commonParam(),
+          content,
+          commentId
+        }
+      }).then(res => {
+        IDM.message.success(res.message)
+        cb()
+      })
+
+
+
+      // this.propData.addCommentInterface &&
+      //   window.IDM.http
+      //     .post(this.propData.addCommentInterface, {
+      //       ...this.commonParam(),
+      //       content,
+      //       commentId,
+      //       showAvatar: false
+      //     })
+      //     .then((res) => {
+      //       if (res.status == 200 && res.data.code == 200) {
+      //         IDM.message.success(res.data.message)
+      //         cb()
+      //         return
+      //       }
+      //       IDM.message.error(res.data.message)
+      //     })
+      //     .catch(function (error) { })
     },
     // 发布评论
     handlePublish() {
@@ -313,6 +412,11 @@ export default {
             case 'subBox':
               IDM.style.setBoxStyle(subBoxObj, element)
               break
+            case 'subBoxBg':
+              if (element && element.hex8) {
+                subBoxObj['background-color'] = element.hex8
+              }
+              break
 
           }
         }
@@ -373,40 +477,70 @@ export default {
       })
     },
     getCommentList(isClear = false) {
-      this.propData.commentListInterface &&
-        window.IDM.http
-          .get(this.propData.commentListInterface, {
-            ...this.commonParam(),
-            showLike: this.propData.isFabulousNumber,
-            page: this.currentPage,
-            showNum: this.propData.showNum,
-            childShowNum: this.propData.childShowNum,
-            sortDir: this.currentSort,
-            showAvatar: this.propData.isShowAvatar
-          })
-          .then((res) => {
-            if (res.status == 200 && res.data.code == 200) {
-              res.data.data.rows.forEach(el => {
-                if (el.total > el.children.length) {
-                  el.isShowMore = true
-                }
-              })
-              if (isClear) {
-                this.componentData.rows = []
-              }
-              res.data.data.rows = [...this.componentData.rows, ...res.data.data.rows]
-              if (res.data.data.total > res.data.data.rows.length) {
-                this.hasMore = true
-              } else {
-                this.hasMore = false
-              }
+      this.handleDataSourceFunction({
+        type: 'list',
+        params: {
+          ...this.commonParam(),
+          showLike: this.propData.isFabulousNumber,
+          page: this.currentPage,
+          showNum: this.propData.showNum,
+          childShowNum: this.propData.childShowNum,
+          sortDir: this.currentSort,
+          showAvatar: this.propData.isShowAvatar
+        }
+      }).then(res => {
+        res.data.rows.forEach(el => {
+          if (el.total > el.children.length) {
+            el.isShowMore = true
+          }
+        })
+        if (isClear) {
+          this.componentData.rows = []
+        }
+        res.data.rows = [...this.componentData.rows, ...res.data.rows]
+        if (res.data.total > res.data.rows.length) {
+          this.hasMore = true
+        } else {
+          this.hasMore = false
+        }
 
-              this.componentData = res.data.data
-            } else {
-              IDM.message.error(res.data.message)
-            }
-          })
-          .catch(function (error) { })
+        this.componentData = res.data.data
+      })
+
+      // this.propData.commentListInterface &&
+      //   window.IDM.http
+      //     .get(this.propData.commentListInterface, {
+      //       ...this.commonParam(),
+      //       showLike: this.propData.isFabulousNumber,
+      //       page: this.currentPage,
+      //       showNum: this.propData.showNum,
+      //       childShowNum: this.propData.childShowNum,
+      //       sortDir: this.currentSort,
+      //       showAvatar: this.propData.isShowAvatar
+      //     })
+      //     .then((res) => {
+      //       if (res.status == 200 && res.data.code == 200) {
+      //         res.data.data.rows.forEach(el => {
+      //           if (el.total > el.children.length) {
+      //             el.isShowMore = true
+      //           }
+      //         })
+      //         if (isClear) {
+      //           this.componentData.rows = []
+      //         }
+      //         res.data.data.rows = [...this.componentData.rows, ...res.data.data.rows]
+      //         if (res.data.data.total > res.data.data.rows.length) {
+      //           this.hasMore = true
+      //         } else {
+      //           this.hasMore = false
+      //         }
+
+      //         this.componentData = res.data.data
+      //       } else {
+      //         IDM.message.error(res.data.message)
+      //       }
+      //     })
+      //     .catch(function (error) { })
     },
     initData() {
       if (this.propData.sortType && this.propData.sortType.length > 0) {
@@ -456,12 +590,6 @@ export default {
   margin: 10px 0;
 }
 
-.comment-list-sub-comment {
-  margin: 20px 0 0 70px;
-  padding: 10px 0 10px 20px;
-  background: #ddd;
-}
-
 .comment-list-name {
   margin: 0 0 5 0;
 }
@@ -489,5 +617,19 @@ export default {
   width: 500px;
   padding: 10px;
   background: #eee;
+}
+
+.textarea-wrapper {
+  position: relative;
+  display: block;
+
+  .m-count {
+    color: #808080;
+    background: #fff;
+    position: absolute;
+    font-size: 12px;
+    bottom: 8px;
+    right: 12px;
+  }
 }
 </style>
