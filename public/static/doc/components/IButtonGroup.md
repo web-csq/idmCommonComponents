@@ -30,7 +30,7 @@ idmCommonComponent@1.0.0
 
 #### 数据源
 
-数据源返回格式，参数格式
+数据源返回格式
 
 ```ts
 interface Button {
