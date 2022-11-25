@@ -23,19 +23,180 @@
             "children": []
         },
         {
+            "type": "group",
+            "text": "样式设置",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "inlineGroup",
+                    "text": "宽高",
+                    "children": [
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "宽",
+                            "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                            "bindKey": "width",
+                            "width": "60px",
+                            "default": "100%"
+                        },
+                        {
+                            "type": "input",
+                            "layoutType": "block",
+                            "text": "高",
+                            "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                            "bindKey": "height",
+                            "width": "60px",
+                            "default": "auto"
+                        }
+                    ]
+                },
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "内外边距",
+                    "bindKey": "box"
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "背景色",
+                    "bindKey": "bgColor",
+                    "placeholder": "请选择颜色"
+                },
+                {
+                    "type": "border",
+                    "layoutType": "block",
+                    "text": "边框",
+                    "bindKey": "border"
+                },
+                {
+                    "type": "group",
+                    "text": "按钮样式",
+                    "desc": "设置通用按钮样式，如果按钮组中配置，则此配置失效",
+                    "helpUrl": "",
+                    "children": [
+                        {
+                            "type": "box",
+                            "layoutType": "block",
+                            "text": "边距",
+                            "bindKey": "btnBox"
+                        },
+                        {
+                            "type": "border",
+                            "layoutType": "block",
+                            "text": "边框",
+                            "bindKey": "btnBorder"
+                        },
+                        {
+                            "type": "font",
+                            "layoutType": "block",
+                            "text": "文字",
+                            "bindKey": "btnFont"
+                        }
+                    ]
+                },
+                {
+                    "type": "group",
+                    "text": "图标样式",
+                    "desc": "设置通用图标样式，如果按钮组中配置，则此配置失效",
+                    "helpUrl": "",
+                    "children": [
+                        {
+                            "type": "inputNumber",
+                            "layoutType": "inline",
+                            "text": "图标尺寸",
+                            "bindKey": "iconSize",
+                            "default": 16
+                        },
+                        {
+                            "type": "colorPicker",
+                            "layoutType": "inline",
+                            "text": "图标颜色",
+                            "bindKey": "iconColor"
+                        },
+                        {
+                            "type": "box",
+                            "layoutType": "block",
+                            "text": "图标边距",
+                            "bindKey": "iconBox"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "数据模式",
+                    "bindKey": "dataType",
+                    "default": "custom",
+                    "dictionary": [
+                        {
+                            "label": "自定义",
+                            "value": "custom"
+                        },
+                        {
+                            "label": "数据源",
+                            "value": "dataSource"
+                        }
+                    ]
+                },
+                {
+                    "type": "dataSourceSelect",
+                    "text": "数据源",
+                    "layoutType": "inline",
+                    "display": "@[dataType == 'dataSource']",
+                    "bindKey": "dataSource"
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "显示函数",
+                    "desc": "如果不设置显示函数，则默认显示；函数返回true/false(显示/隐藏),接受参数(button.key)",
+                    "bindKey": "showFunction",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "点击事件",
+                    "desc": "按钮/标签点击事件，接受参数(button.key)",
+                    "bindKey": "clickFunction",
+                    "multiple": false
+                }
+            ]
+        },
+        {
             "type": "table",
             "text": "按钮组",
+            "display": "@[dataType == 'custom']",
             "tabText": "按钮[index]",
             "bindKey": "buttonList",
-            "desc": "",
+            "desc": "自定义配置按钮组",
             "default": [
                 {
+                    "key": "btnOne",
                     "btnText": "按钮",
                     "btnType": "default",
                     "iconSize": 16
                 }
             ],
             "children": [
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "desc": "用来区分不同的按钮，必填，唯一",
+                    "text": "key",
+                    "bindKey": "key"
+                },
                 {
                     "type": "input",
                     "layoutType": "inline",
@@ -99,71 +260,6 @@
                             "bindKey": "btnFont"
                         }
                     ]
-                },
-                {
-                    "type": "actionSelect",
-                    "layoutType": "block",
-                    "text": "显示函数",
-                    "bindKey": "showFunction",
-                    "multiple": false
-                },
-                {
-                    "type": "actionSelect",
-                    "layoutType": "block",
-                    "text": "点击事件",
-                    "bindKey": "clickFunction",
-                    "multiple": false
-                }
-            ]
-        },
-        {
-            "type": "group",
-            "text": "样式设置",
-            "desc": "点击？查看样式设置用法指南",
-            "helpUrl": "",
-            "children": [
-                {
-                    "type": "inlineGroup",
-                    "text": "宽高",
-                    "children": [
-                        {
-                            "type": "input",
-                            "layoutType": "block",
-                            "text": "宽",
-                            "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
-                            "bindKey": "width",
-                            "width": "60px",
-                            "default": "100%"
-                        },
-                        {
-                            "type": "input",
-                            "layoutType": "block",
-                            "text": "高",
-                            "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
-                            "bindKey": "height",
-                            "width": "60px",
-                            "default": "auto"
-                        }
-                    ]
-                },
-                {
-                    "type": "box",
-                    "layoutType": "block",
-                    "text": "内外边距",
-                    "bindKey": "box"
-                },
-                {
-                    "type": "colorPicker",
-                    "layoutType": "inline",
-                    "text": "背景色",
-                    "bindKey": "bgColor",
-                    "placeholder": "请选择颜色"
-                },
-                {
-                    "type": "border",
-                    "layoutType": "block",
-                    "text": "边框",
-                    "bindKey": "border"
                 }
             ]
         }

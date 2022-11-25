@@ -1,8 +1,8 @@
 <template>
   <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="d-flex align-c">
-    <template v-for="item, index in propData.buttonList">
-      <div :key="index" class="d-flex align-c cursor-p" :style="handleGetBtnStyle(item)" @click="handleButtonClick(item)"
-        v-if="handleButtonShow(item)">
+    <template v-for="item, index in buttonList">
+      <div :key="index" class="d-flex align-c cursor-p" :style="handleGetBtnStyle(item)"
+        @click="handleButtonClick(item)" v-if="handleButtonShow(item)">
         <svg v-if="item.icon && item.icon.length" :style="handleGetIconStyle(item)" class="btn-left-icon"
           aria-hidden="true">
           <use :xlink:href="`#${item.icon[0]}`"></use>
@@ -18,7 +18,8 @@ export default {
   data() {
     return {
       moduleObject: {},
-      propData: this.$root.propData.compositeAttr || {}
+      propData: this.$root.propData.compositeAttr || {},
+      buttonList: []
     }
   },
   created() {
@@ -31,7 +32,7 @@ export default {
       this.convertAttrToStyleObject();
     },
     convertAttrToStyleObject() {
-      const styleObject = {}, fontObj = {};
+      const styleObject = {}, fontObj = {}, iconObj = {};
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
           const element = this.propData[key];
@@ -54,15 +55,37 @@ export default {
                 styleObject['background-color'] = IDM.hex8ToRgbaString(element.hex8)
               }
               break
-            case 'font':
+            // 按钮
+            case 'btnFont':
               IDM.style.setFontStyle(fontObj, element)
               break;
-
+            case 'btnBorder':
+              IDM.style.setBorderStyle(fontObj, element)
+              break;
+            case 'btnBox':
+              IDM.style.setBoxStyle(fontObj, element)
+              break;
+            // 图标
+            case 'iconSize':
+              iconObj['width'] = element + 'px'
+              iconObj['height'] = element + 'px'
+              iconObj['font-size'] = element + 'px'
+              break;
+            case 'iconColor':
+              if (element?.hex8) {
+                iconObj['color'] = IDM.hex8ToRgbaString(element.hex8)
+                iconObj['fill'] = IDM.hex8ToRgbaString(element.hex8)
+              }
+              break;
+            case 'iconBox':
+              IDM.style.setBoxStyle(iconObj, element)
+              break;
           }
         }
       }
       window.IDM.setStyleToPageHead(this.moduleObject.id, styleObject);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .btn-text', fontObj);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .btn-left-icon', iconObj);
       this.initData();
     },
     //btn style
@@ -90,16 +113,16 @@ export default {
     },
     // button is show
     handleButtonShow(item) {
-      const funcName = item?.showFunction?.[0]?.name
+      const funcName = this.propData?.showFunction?.[0]?.name
       if (!funcName) return true
-      const result = window?.[funcName]?.call(this)
+      const result = window?.[funcName]?.call(this, item.key)
       return result
     },
     // click event
     handleButtonClick(item) {
-      const funcName = item?.clickFunction?.[0]?.name
+      const funcName = this.propData?.clickFunction?.[0]?.name
       if (funcName) {
-        window?.[funcName]?.call(this)
+        window?.[funcName]?.call(this, item.key)
       }
     },
     reload() {
@@ -107,6 +130,25 @@ export default {
       this.initData();
     },
     initData() {
+
+      switch (this.propData.dataType) {
+        case 'custom':
+          this.buttonList = this.propData.buttonList
+          break;
+        case 'dataSource':
+          IDM.datasource.request(this.propData?.dataSource?.[0]?.id, {
+            moduleObject: this.moduleObject,
+          }, (res) => {
+            if (res.code == 200) {
+              this.buttonList = res.data
+              return
+            }
+            IDM.message.error(res.message)
+          }, (err) => {
+            this.buttonList = []
+          })
+          break;
+      }
     },
     receiveBroadcastMessage(object) {
       console.log("组件收到消息", object)
