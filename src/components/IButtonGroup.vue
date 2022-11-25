@@ -1,7 +1,7 @@
 <template>
   <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id" class="d-flex align-c">
     <template v-for="item, index in buttonList">
-      <div :key="index" class="d-flex align-c cursor-p" :style="handleGetBtnStyle(item)"
+      <div :key="index" class="d-flex align-c cursor-p idm-common-button" :style="handleGetBtnStyle(item)"
         @click="handleButtonClick(item)" v-if="handleButtonShow(item)">
         <svg v-if="item.icon && item.icon.length" :style="handleGetIconStyle(item)" class="btn-left-icon"
           aria-hidden="true">
@@ -32,7 +32,7 @@ export default {
       this.convertAttrToStyleObject();
     },
     convertAttrToStyleObject() {
-      const styleObject = {}, fontObj = {}, iconObj = {};
+      const styleObject = {}, btnObj = {}, iconObj = {}, btnHoverObj = {};
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
           const element = this.propData[key];
@@ -57,14 +57,19 @@ export default {
               break
             // 按钮
             case 'btnFont':
-              IDM.style.setFontStyle(fontObj, element)
+              IDM.style.setFontStyle(btnObj, element)
               break;
             case 'btnBorder':
-              IDM.style.setBorderStyle(fontObj, element)
+              IDM.style.setBorderStyle(btnObj, element)
               break;
             case 'btnBox':
-              IDM.style.setBoxStyle(fontObj, element)
+              IDM.style.setBoxStyle(btnObj, element)
               break;
+            case 'hoverBgColor':
+              if (element && element.hex8) {
+                btnHoverObj['background-color'] = IDM.hex8ToRgbaString(element.hex8)
+              }
+              break
             // 图标
             case 'iconSize':
               iconObj['width'] = element + 'px'
@@ -84,7 +89,8 @@ export default {
         }
       }
       window.IDM.setStyleToPageHead(this.moduleObject.id, styleObject);
-      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .btn-text', fontObj);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .idm-common-button', btnObj);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .idm-common-button:hover', btnHoverObj);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .btn-left-icon', iconObj);
       this.initData();
     },
@@ -162,3 +168,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.btn-text {
+  font: inherit;
+}
+</style>

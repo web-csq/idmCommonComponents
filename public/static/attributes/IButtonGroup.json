@@ -78,6 +78,13 @@
                     "helpUrl": "",
                     "children": [
                         {
+                            "type": "colorPicker",
+                            "layoutType": "inline",
+                            "text": "悬浮背景",
+                            "desc": "设置鼠标悬浮时的背景色",
+                            "bindKey": "hoverBgColor"
+                        },
+                        {
                             "type": "box",
                             "layoutType": "block",
                             "text": "边距",
