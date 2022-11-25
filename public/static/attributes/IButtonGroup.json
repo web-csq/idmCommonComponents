@@ -80,6 +80,13 @@
                         {
                             "type": "colorPicker",
                             "layoutType": "inline",
+                            "text": "背景色",
+                            "desc": "设置按钮背景色",
+                            "bindKey": "BgColor"
+                        },
+                        {
+                            "type": "colorPicker",
+                            "layoutType": "inline",
                             "text": "悬浮背景",
                             "desc": "设置鼠标悬浮时的背景色",
                             "bindKey": "hoverBgColor"

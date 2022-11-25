@@ -65,6 +65,11 @@ export default {
             case 'btnBox':
               IDM.style.setBoxStyle(btnObj, element)
               break;
+            case 'BgColor':
+              if (element && element.hex8) {
+                btnObj['background-color'] = IDM.hex8ToRgbaString(element.hex8)
+              }
+              break
             case 'hoverBgColor':
               if (element && element.hex8) {
                 btnHoverObj['background-color'] = IDM.hex8ToRgbaString(element.hex8)
