@@ -76,6 +76,9 @@ export default {
       }
       window.IDM.setStyleToPageHead(this.moduleObject.id, styleObject);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-rate-star-first, .ant-rate-star-second', fontObj);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-rate-star-full .ant-rate-star-second, .ant-rate-star-half .ant-rate-star-first', {
+        color: 'inherit !important'
+      });
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-rate', selectFontObj);
       this.initData();
     },

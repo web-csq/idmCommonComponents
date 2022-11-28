@@ -161,8 +161,8 @@
                     "type": "select",
                     "layoutType": "inline",
                     "text": "数据模式",
-                    "bindKey": "dataType",
-                    "default": "dataSource",
+                    "bindKey": "dataSourceType",
+                    "default": "pageCommonInterface",
                     "dictionary": [
                         {
                             "label": "数据源",
@@ -178,7 +178,7 @@
                     "type": "dataSourceSelect",
                     "text": "数据源",
                     "layoutType": "inline",
-                    "display": "@[dataType == 'dataSource']",
+                    "display": "@[dataSourceType == 'dataSource']",
                     "bindKey": "dataSource"
                 },
                 {

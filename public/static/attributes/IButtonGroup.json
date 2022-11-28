@@ -140,78 +140,7 @@
                 }
             ]
         },
-        {
-            "type": "group",
-            "text": "高级",
-            "desc": "点击？查看样式设置用法指南",
-            "helpUrl": "",
-            "children": [
-                {
-                    "type": "select",
-                    "layoutType": "inline",
-                    "text": "数据模式",
-                    "bindKey": "dataType",
-                    "default": "custom",
-                    "dictionary": [
-                        {
-                            "label": "自定义",
-                            "value": "custom"
-                        },
-                        {
-                            "label": "数据源",
-                            "value": "dataSource"
-                        },
-                        {
-                            "label": "页面统一接口",
-                            "value": "pageCommonInterface"
-                        }
-                    ]
-                },
-                {
-                    "type": "dataSourceSelect",
-                    "text": "数据源",
-                    "layoutType": "inline",
-                    "display": "@[dataType == 'dataSource']",
-                    "bindKey": "dataSource"
-                },
-                {
-                    "type": "input",
-                    "layoutType": "inline",
-                    "text": "结果集名",
-                    "bindKey": "dataName",
-                    "desc": "页面接口设定的结果集名称，位置为：页面设置》高级设置》页面接口",
-                    "default": "",
-                    "placeholder": "示例：resultData",
-                    "display": "@[dataSourceType=='pageCommonInterface']"
-                },
-                {
-                    "type": "textarea",
-                    "layoutType": "inline",
-                    "text": "显示字段",
-                    "bindKey": "dataFiled",
-                    "desc": "根据接口返回数据格式指定结果集的字段，比如结果集名为resultData（自定义接口忽略）且它的值为{data:{filedName:[{\"text\":\"\",\"value\":\"\",\"check\":true}]}}，则这里应该填写data.filedName",
-                    "default": "",
-                    "placeholder": "示例：data.filedName 或者 [0].data[0].filedName",
-                    "display": "@[dataSourceType=='pageCommonInterface']"
-                },
-                {
-                    "type": "actionSelect",
-                    "layoutType": "block",
-                    "text": "显示函数",
-                    "desc": "如果不设置显示函数，则默认显示；函数返回true/false(显示/隐藏),接受参数(button.key)",
-                    "bindKey": "showFunction",
-                    "multiple": false
-                },
-                {
-                    "type": "actionSelect",
-                    "layoutType": "block",
-                    "text": "点击事件",
-                    "desc": "按钮/标签点击事件，接受参数(button.key)",
-                    "bindKey": "clickFunction",
-                    "multiple": false
-                }
-            ]
-        },
+        
         {
             "type": "table",
             "text": "按钮组",
@@ -298,6 +227,78 @@
                             "bindKey": "btnFont"
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "数据模式",
+                    "bindKey": "dataType",
+                    "default": "custom",
+                    "dictionary": [
+                        {
+                            "label": "自定义",
+                            "value": "custom"
+                        },
+                        {
+                            "label": "数据源",
+                            "value": "dataSource"
+                        },
+                        {
+                            "label": "页面统一接口",
+                            "value": "pageCommonInterface"
+                        }
+                    ]
+                },
+                {
+                    "type": "dataSourceSelect",
+                    "text": "数据源",
+                    "layoutType": "inline",
+                    "display": "@[dataType == 'dataSource']",
+                    "bindKey": "dataSource"
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "结果集名",
+                    "bindKey": "dataName",
+                    "desc": "页面接口设定的结果集名称，位置为：页面设置》高级设置》页面接口",
+                    "default": "",
+                    "placeholder": "示例：resultData",
+                    "display": "@[dataType=='pageCommonInterface']"
+                },
+                {
+                    "type": "textarea",
+                    "layoutType": "inline",
+                    "text": "显示字段",
+                    "bindKey": "dataFiled",
+                    "desc": "根据接口返回数据格式指定结果集的字段，比如结果集名为resultData（自定义接口忽略）且它的值为{data:{filedName:[{\"text\":\"\",\"value\":\"\",\"check\":true}]}}，则这里应该填写data.filedName",
+                    "default": "",
+                    "placeholder": "示例：data.filedName 或者 [0].data[0].filedName",
+                    "display": "@[dataType=='pageCommonInterface']"
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "显示函数",
+                    "desc": "如果不设置显示函数，则默认显示；函数返回true/false(显示/隐藏),接受参数(button.key)",
+                    "bindKey": "showFunction",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "点击事件",
+                    "desc": "按钮/标签点击事件，接受参数(button.key)",
+                    "bindKey": "clickFunction",
+                    "multiple": false
                 }
             ]
         }
