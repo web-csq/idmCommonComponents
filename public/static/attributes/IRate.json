@@ -1,0 +1,215 @@
+{
+    "classId": "idm.component.idmCommonComponent.irate",
+    "comName": "评分",
+    "className": "IRate",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "唯一标识",
+            "bindKey": "ctrlId",
+            "disabled": true,
+            "default": "@[packageid]",
+            "desc": "",
+            "helpUrl": ""
+        },
+        {
+            "type": "group",
+            "text": "基本属性",
+            "desc": "提供设置组件能达到展示效果的基本属性设置信息",
+            "children": [
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "评分总数",
+                    "bindKey": "count",
+                    "default": 5
+                },
+                {
+                    "type": "radio",
+                    "styleType": "radio",
+                    "layoutType": "inline",
+                    "text": "允许清除",
+                    "bindKey": "allowClear",
+                    "dictionary": [
+                        {
+                            "label": "开启",
+                            "value": true
+                        },
+                        {
+                            "label": "关闭",
+                            "value": false
+                        }
+                    ],
+                    "default": true
+                },
+                {
+                    "type": "radio",
+                    "styleType": "radio",
+                    "layoutType": "inline",
+                    "text": "允许半选",
+                    "bindKey": "allowHalf",
+                    "dictionary": [
+                        {
+                            "label": "开启",
+                            "value": true
+                        },
+                        {
+                            "label": "关闭",
+                            "value": false
+                        }
+                    ],
+                    "default": true
+                },
+                {
+                    "type": "radio",
+                    "styleType": "radio",
+                    "layoutType": "inline",
+                    "text": "是否只读",
+                    "desc": "如果组件初始数据中为true,则此处false值失效",
+                    "bindKey": "rateDisabled",
+                    "dictionary": [
+                        {
+                            "label": "开启",
+                            "value": true
+                        },
+                        {
+                            "label": "关闭",
+                            "value": false
+                        }
+                    ],
+                    "default": false
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "评分字符",
+                    "bindKey": "character",
+                    "desc": "自定义评分字符"
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "样式设置",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "宽",
+                    "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                    "bindKey": "width",
+                    "width": "60px",
+                    "default": "100%"
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "高",
+                    "desc": "填写auto则为自适应，或者使用px、%、vh等单位，比如100%、100px、100vh等等",
+                    "bindKey": "height",
+                    "width": "60px",
+                    "default": "auto"
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "背景色",
+                    "bindKey": "bgColor",
+                    "placeholder": "请选择颜色",
+                    "default": {}
+                },
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "内外边距",
+                    "bindKey": "box"
+                },
+                {
+                    "type": "border",
+                    "layoutType": "block",
+                    "text": "边框",
+                    "bindKey": "border"
+                },
+                {
+                    "type": "font",
+                    "layoutType": "block",
+                    "text": "图标文字样式",
+                    "desc": "未选中图标/字符样式",
+                    "bindKey": "font"
+                },
+                {
+                    "type": "colorPicker",
+                    "layoutType": "inline",
+                    "text": "选中颜色",
+                    "bindKey": "selectFontColor",
+                    "placeholder": "选中图标/字符颜色"
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "数据模式",
+                    "bindKey": "dataType",
+                    "default": "dataSource",
+                    "dictionary": [
+                        {
+                            "label": "数据源",
+                            "value": "dataSource"
+                        },
+                        {
+                            "label": "页面统一接口",
+                            "value": "pageCommonInterface"
+                        }
+                    ]
+                },
+                {
+                    "type": "dataSourceSelect",
+                    "text": "数据源",
+                    "layoutType": "inline",
+                    "display": "@[dataType == 'dataSource']",
+                    "bindKey": "dataSource"
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "结果集名",
+                    "bindKey": "dataName",
+                    "desc": "页面接口设定的结果集名称，位置为：页面设置》高级设置》页面接口",
+                    "default": "",
+                    "placeholder": "示例：resultData",
+                    "display": "@[dataSourceType=='pageCommonInterface']"
+                },
+                {
+                    "type": "textarea",
+                    "layoutType": "inline",
+                    "text": "显示字段",
+                    "bindKey": "dataFiled",
+                    "desc": "根据接口返回数据格式指定结果集的字段，比如结果集名为resultData（自定义接口忽略）且它的值为{data:{filedName:[{\"text\":\"\",\"value\":\"\",\"check\":true}]}}，则这里应该填写data.filedName",
+                    "default": "",
+                    "placeholder": "示例：data.filedName 或者 [0].data[0].filedName",
+                    "display": "@[dataSourceType=='pageCommonInterface']"
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "评分选择后事件",
+                    "desc": "评分选择后事件，接受参数(value)",
+                    "bindKey": "selectFunction",
+                    "multiple": false
+                }
+            ]
+        }
+    ]
+}

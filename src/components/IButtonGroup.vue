@@ -159,6 +159,9 @@ export default {
             this.buttonList = []
           })
           break;
+        case "pageCommonInterface":
+          //使用通用接口直接跳过，在setContextValue执行
+          break;
       }
     },
     receiveBroadcastMessage(object) {
@@ -166,6 +169,14 @@ export default {
     },
     setContextValue(object) {
       console.log("统一接口设置的值", object);
+      if (object.type != "pageCommonInterface") {
+        return;
+      }
+      //这里使用的是子表，所以要循环匹配所有子表的属性然后再去设置修改默认值
+      if (object.key == this.propData.dataName) {
+        this.buttonList = this.getExpressData(this.propData.dataName,this.propData.dataFiled,object.data);
+        // this.$set(this.propData, "fontContent", this.getExpressData(this.propData.dataName, this.propData.dataFiled, object.data));
+      }
     },
     sendBroadcastMessage(object) {
       window.IDM.broadcast && window.IDM.broadcast.send(object);
