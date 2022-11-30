@@ -167,6 +167,25 @@ export default {
     receiveBroadcastMessage(object) {
       console.log("组件收到消息", object)
     },
+    getExpressData(dataName,dataFiled,resultData){
+      //给defaultValue设置dataFiled的值
+      var _defaultVal = undefined;
+      if(dataFiled){
+        var filedExp = dataFiled;
+        filedExp =
+          dataName +
+          (filedExp.startsWiths("[") ? "" : ".") +
+          filedExp;
+        var dataObject = { IDM: window.IDM };
+        dataObject[dataName] = resultData;
+        _defaultVal = window.IDM.express.replace.call(
+          this,
+          "@[" + filedExp + "]",
+          dataObject
+        );
+      }
+      return _defaultVal;
+    },
     setContextValue(object) {
       console.log("统一接口设置的值", object);
       if (object.type != "pageCommonInterface") {

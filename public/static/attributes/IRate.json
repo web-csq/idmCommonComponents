@@ -158,6 +158,22 @@
             "helpUrl": "",
             "children": [
                 {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "表单标识",
+                    "bindKey": "formFiledKey",
+                    "desc": "如果为空则会提交表单时用唯一标识作为key",
+                    "default": ""
+                },
+                {
+                    "type": "pageModuleSelect",
+                    "layoutType": "inline",
+                    "text": "联动组件",
+                    "desc": "评分改变时，接受评分的value的组件",
+                    "bindKey": "triggerComponents",
+                    "multiple": true
+                },
+                {
                     "type": "select",
                     "layoutType": "inline",
                     "text": "数据模式",

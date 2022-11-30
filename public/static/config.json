@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lasttime": "2022-11-28 11:49:38",
+  "lasttime": "2022-11-28 17:37:39",
   "author": "申龙",
   "className": "idmCommonComponent",
   "module": [
@@ -22,6 +22,13 @@
       "classId": "idm.component.idmCommonComponent.irate",
       "comName": "评分",
       "className": "IRate",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.component.idmCommonComponent.ivideoplayer",
+      "comName": "视频播放",
+      "className": "IVideoPlayer",
       "comType": "common",
       "comLangue": "vue"
     }

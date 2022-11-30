@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     rateDisabled() {
-      if(this.propData.rateDisabled || this.rateDataObj.disabled) return true
+      if (this.propData.rateDisabled || this.rateDataObj.disabled) return true
       return false
     }
   },
@@ -34,6 +34,16 @@ export default {
     handleRateChange(rate) {
       const funcName = this.propData?.selectFunction?.[0]?.name
       window?.[funcName]?.call(this, rate)
+      //传递联动需求值，因为很多地方都是指定这个消息类型的消息作为接收组件本身所需要的需求值
+      if (this.propData?.triggerComponents?.length > 0) {
+        this.sendBroadcastMessage({
+          type: "linkageDemand",
+          message: rate,
+          rangeModule: this.propData.triggerComponents.map(el => el.moduleId),
+          messageKey: this.propData.formFiledKey || this.propData.ctrlId,
+        });
+      }
+
     },
     propDataWatchHandle(propData) {
       this.propData = propData.compositeAttr || {};
@@ -100,7 +110,6 @@ export default {
             }
             IDM.message.error(res.message)
           }, (err) => {
-            this.buttonList = []
           })
           break;
         case "pageCommonInterface":
@@ -115,6 +124,25 @@ export default {
       } else if (object.type && object.type == "linkageHideModule") {
         this.hideThisModuleHandle();
       }
+    },
+    getExpressData(dataName, dataFiled, resultData) {
+      //给defaultValue设置dataFiled的值
+      var _defaultVal = undefined;
+      if (dataFiled) {
+        var filedExp = dataFiled;
+        filedExp =
+          dataName +
+          (filedExp.startsWiths("[") ? "" : ".") +
+          filedExp;
+        var dataObject = { IDM: window.IDM };
+        dataObject[dataName] = resultData;
+        _defaultVal = window.IDM.express.replace.call(
+          this,
+          "@[" + filedExp + "]",
+          dataObject
+        );
+      }
+      return _defaultVal;
     },
     setContextValue(object) {
       console.log("统一接口设置的值", object);

@@ -1,0 +1,225 @@
+{
+    "classId": "idm.component.idmCommonComponent.ivideoplayer",
+    "comName": "视频播放",
+    "className": "IVideoPlayer",
+    "comType": "common",
+    "comLangue": "vue",
+    "compositeAttr": [
+        {
+            "type": "input",
+            "layoutType": "inline",
+            "text": "唯一标识",
+            "bindKey": "ctrlId",
+            "disabled": true,
+            "default": "@[packageid]",
+            "desc": "",
+            "helpUrl": ""
+        },
+        {
+            "type": "group",
+            "text": "基本属性",
+            "desc": "提供设置组件能达到展示效果的基本属性设置信息",
+            "children": [
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "播放器宽",
+                    "desc": "播放器宽",
+                    "bindKey": "width",
+                    "default": "100%"
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "播放器高",
+                    "desc": "播放器高",
+                    "bindKey": "height",
+                    "default": "500px"
+                },
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "播放类型",
+                    "bindKey": "videoType",
+                    "desc": "播放类型: 包括 点播、直播、m3u8点播、flv点播",
+                    "dictionary": [
+                        {
+                            "label": "mp4格式",
+                            "value": "1"
+                        },
+                        {
+                            "label": "m3u8格式播放",
+                            "value": "2"
+                        },
+                        {
+                            "label": "flv格式播放",
+                            "value": "3"
+                        }
+                    ],
+                    "default": "1"
+                },
+                {
+                    "type": "switch",
+                    "layoutType": "inline",
+                    "text": "循环播放",
+                    "desc": "循环播放",
+                    "bindKey": "loop",
+                    "default": false
+                },
+                {
+                    "type": "switch",
+                    "layoutType": "inline",
+                    "text": "自动播放",
+                    "desc": "自动播放",
+                    "bindKey": "autoplay",
+                    "default": false
+                },
+                {
+                    "type": "switch",
+                    "layoutType": "inline",
+                    "text": "画中画",
+                    "desc": "显示画中画按钮，预览时生效",
+                    "bindKey": "pictureInPictureToggle",
+                    "default": true
+                },
+                {
+                    "type": "switch",
+                    "layoutType": "inline",
+                    "text": "弹幕按钮",
+                    "desc": "显示弹幕按钮，预览时生效",
+                    "bindKey": "isShowDanmu",
+                    "default": true
+                },
+                {
+                    "type": "uploadImage",
+                    "layoutType": "inline",
+                    "text": "封面图片",
+                    "bindKey": "poster",
+                    "default": ""
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "容器样式",
+            "desc": "点击？查看样式设置用法指南",
+            "helpUrl": "",
+            "children": [
+                {
+                    "type": "box",
+                    "layoutType": "block",
+                    "text": "内外边距",
+                    "bindKey": "box",
+                    "default": {
+                        "marginTopVal": "",
+                        "marginRightVal": "",
+                        "marginBottomVal": "",
+                        "marginLeftVal": "",
+                        "paddingTopVal": "",
+                        "paddingRightVal": "",
+                        "paddingBottomVal": "",
+                        "paddingLeftVal": ""
+                    }
+                },
+                {
+                    "type": "font",
+                    "layoutType": "block",
+                    "text": "弹幕默认字体",
+                    "bindKey": "danmuFont",
+                    "default": {
+                        "fontFamily": "impact, 'microsoft yahei'",
+                        "fontColors": {
+                            "hex": "#FFFFFF",
+                            "hex8": "#FFFFFFFF"
+                        },
+                        "fontWeight": "700",
+                        "fontStyle": "normal",
+                        "fontSize": 25,
+                        "fontSizeUnit": "px",
+                        "fontLineHeight": 1.125,
+                        "fontLineHeightUnit": "",
+                        "fontTextAlign": "",
+                        "fontDecoration": "",
+                        "fontLetterSpacing": 0,
+                        "fontLetterSpacingUnit": ""
+                    }
+                }
+            ]
+        },
+        {
+            "type": "group",
+            "text": "高级",
+            "desc": "点击？查看高级设置用法指南",
+            "children": [
+                {
+                    "type": "select",
+                    "layoutType": "inline",
+                    "text": "视频数据",
+                    "desc": "配置视频数据模式",
+                    "bindKey": "dataSourceType",
+                    "default": "pageCommonInterface",
+                    "dictionary": [
+                        {
+                            "label": "数据源",
+                            "value": "dataSource"
+                        },
+                        {
+                            "label": "自定义函数",
+                            "value": "customFunc"
+                        },
+                        {
+                            "label": "页面统一接口",
+                            "value": "pageCommonInterface"
+                        }
+                    ]
+                },
+                {
+                    "type": "dataSourceSelect",
+                    "text": "数据源",
+                    "desc": "视频数据源",
+                    "layoutType": "inline",
+                    "display": "@[dataSourceType == 'dataSource']",
+                    "bindKey": "dataSource"
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "结果集名",
+                    "bindKey": "dataName",
+                    "desc": "页面接口设定的结果集名称，位置为：页面设置》高级设置》页面接口",
+                    "default": "",
+                    "placeholder": "示例：resultData",
+                    "display": "@[dataSourceType=='pageCommonInterface']"
+                },
+                {
+                    "type": "textarea",
+                    "layoutType": "inline",
+                    "text": "显示字段",
+                    "bindKey": "dataFiled",
+                    "desc": "根据接口返回数据格式指定结果集的字段，比如结果集名为resultData（自定义接口忽略）且它的值为{data:{filedName:[{\"text\":\"\",\"value\":\"\",\"check\":true}]}}，则这里应该填写data.filedName",
+                    "default": "",
+                    "placeholder": "示例：data.filedName 或者 [0].data[0].filedName",
+                    "display": "@[dataSourceType=='pageCommonInterface']"
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "自定义视频数据源",
+                    "desc": "从自定义函数中返回数据源",
+                    "bindKey": "resourceFun",
+                    "display": "@[dataSourceType == 'customFunc']",
+                    "multiple": false
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "自定义接口参数",
+                    "desc": "自定义接口参数",
+                    "bindKey": "parameterFun",
+                    "display": "@[resource]",
+                    "multiple": false
+                }
+            ]
+        }
+    ]
+}
