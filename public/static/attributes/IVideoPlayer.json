@@ -209,15 +209,6 @@
                     "bindKey": "resourceFun",
                     "display": "@[dataSourceType == 'customFunc']",
                     "multiple": false
-                },
-                {
-                    "type": "actionSelect",
-                    "layoutType": "block",
-                    "text": "自定义接口参数",
-                    "desc": "自定义接口参数",
-                    "bindKey": "parameterFun",
-                    "display": "@[resource]",
-                    "multiple": false
                 }
             ]
         }

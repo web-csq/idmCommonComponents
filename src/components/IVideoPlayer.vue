@@ -9,7 +9,8 @@
     <div id="idm-video-wrap">
       <video id="idm-video-player" class="video-js vjs-big-play-centered vjs-default-skin">
       </video>
-      <IBarrage ref="iBarrage" :percent="barragePercent" :isPause="isBarragePause" :arr="barrageArr"></IBarrage>
+      <IBarrage ref="iBarrage" v-if="isShowBarrage" :percent="barragePercent" :isPause="isBarragePause"
+        :arr="barrageArr"></IBarrage>
     </div>
   </div>
 </template>
@@ -36,6 +37,7 @@ export default {
       isInited: false,
       barragePercent: 80,
       isBarragePause: true,
+      isShowBarrage: true,
       barrageArr: []
     }
   },
@@ -92,43 +94,56 @@ export default {
       window.IDM.setStyleToPageHead(this.moduleObject.id + " #idm-video-wrap", styleObj);
       window.IDM.setStyleToPageHead(this.moduleObject.id + " .barrage-wrapper .barrage-item", danmuStyleObj);
     },
-    initBarrageList() {
+    initBarrageList(arr = []) {
       this.barrageArr = []
-      // if (this.moduleObject.env == 'develop') {
-      for (let i = 0; i <= 1000; i++) {
-        this.barrageArr.push({
-          direction: 1000 % i === 0 ? 'top' : 'default',
-          content: arrExample[parseInt(Math.random() * arrExample.length)]
-        })
-      }
-      return
-      // }
-    },
-    // 弹幕开关
-    addDanmaBtn(danmakuShow) {
-      const _this = this
-      var Dan = VideoJs.getComponent('Button');
-      var DanButton = VideoJs.extend(Dan, {
-        constructor: function () {
-          Dan.apply(this, arguments);
-          this.controlText("弹幕");
-        },
-        buildCSSClass: function () {
-          return "vjs-control vjs-button";
-        },
-        handleClick: function () {
-          if (danmakuShow) {
-            _this.isBarragePause = true
-            this.el_.className = this.el_.className.replace(/danmu-open/, '');
-          } else {
-            _this.isBarragePause = false
-            this.el_.className += ' danmu-open';
-          }
-          danmakuShow = !danmakuShow;
+      if (this.moduleObject.env == 'develop') {
+        for (let i = 0; i <= 1000; i++) {
+          this.barrageArr.push({
+            direction: 1000 % i === 0 ? 'top' : 'default',
+            content: arrExample[parseInt(Math.random() * arrExample.length)]
+          })
         }
-      });
-      VideoJs.registerComponent('DanButton', DanButton);
-      this.player.getChild('controlBar').addChild('DanButton', {}, 3);
+        return
+      }
+      this.barrageArr = arr
+    },
+    // 弹幕
+    addDanmaBtn() {
+      const MenuButton = VideoJs.getComponent('MenuButton')
+      const Menu = VideoJs.getComponent('Menu')
+      const MenuItem = VideoJs.getComponent('MenuItem')
+      const items = ['80%', '20%', '关闭']
+      const myMenu = new Menu(this.player)
+      const myMenuItemList = []
+      const myMenuButton = new MenuButton(this.player)
+      myMenuButton.addChild(myMenu)
+      myMenuButton.controlText('弹幕')
+      myMenuButton.addClass('danmu-menu-button')
+      for (let i = 0; i < items.length; i++) {
+        myMenuItemList.push(new MenuItem(this.player, { label: items[i] }))
+        myMenuItemList[i].on('click', $event => {
+          const percent = parseInt($event.target.innerText)
+          // 关闭
+          if (isNaN(percent)) {
+            this.isShowBarrage = false
+            this.isBarragePause = true
+            return
+          }
+          this.isShowBarrage = true
+          this.isBarragePause = false
+          this.$nextTick(() => {
+            this.barragePercent = percent
+            this.$refs['iBarrage'].handleSizeChange()
+          })
+        })
+        myMenu.addItem(myMenuItemList[i])
+      }
+      this.player.myMenu = myMenu
+      this.player.myMenuItemList = myMenuItemList
+
+
+      this.player.myMenuButton = myMenuButton
+      this.player.controlBar.addChild(myMenuButton, {})
     },
     // 创建全屏按钮
     createFullScreenBtn(isFullScreen) {
@@ -178,82 +193,98 @@ export default {
     },
 
     renderVideo() {
-      if (this.player && !this.isInited) {
-        if (this.propData.isShowDanmu) {
-          this.addDanmaBtn(false)
-        }
-        this.createFullScreenBtn(false)
-        this.isInited = true
-        return
-      }
-      const _this = this;
-      this.player = VideoJs('idm-video-player', {
-        language: 'zh-CN',
-        loop: this.propData.loop,
-        poster: this.propData.poster,
-        autoplay: this.propData.autoplay,
-        controls: true,
-        sources: this.resourceVideo,
-        controlBar: {
-          fullscreenToggle: !!VideoJs.browser.IE_VERSION,
-          pictureInPictureToggle: this.propData.pictureInPictureToggle  // 画中画按钮
-        }
-      }, function onPlayerReady() {
-        this.on('play', () => {
-          if (_this.isFirstPlay) {
-            _this.isFirstPlay = false
+      this.$nextTick(() => {
+
+
+        if (this.moduleObject.env === 'develop') {
+          if (this.player && !this.isInited) {
+            if (this.propData.isShowDanmu) {
+              this.isShowBarrage = true
+              this.addDanmaBtn()
+            }
+            this.createFullScreenBtn(false)
+            this.isInited = true
+            return
           }
-          _this.isBarragePause = false
-          console.log('开始播放')
-        })
+        }
+        const _this = this;
+        this.player = VideoJs('idm-video-player', {
+          language: 'zh-CN',
+          loop: this.propData.loop,
+          poster: this.propData.poster,
+          autoplay: this.propData.autoplay,
+          controls: true,
+          sources: this.resourceVideo,
+          controlBar: {
+            fullscreenToggle: !!VideoJs.browser.IE_VERSION,
+            pictureInPictureToggle: this.propData.pictureInPictureToggle  // 画中画按钮
+          }
+        }, function onPlayerReady() {
+          this.on('play', () => {
+            if (_this.isFirstPlay) {
+              _this.isFirstPlay = false
+            }
+            _this.isBarragePause = false
+            console.log('开始播放')
+          })
 
-        this.on('pause', () => {
-          _this.isBarragePause = true
-          console.log('视频已经暂停');
+          this.on('pause', () => {
+            _this.isBarragePause = true
+            console.log('视频已经暂停');
+          })
         })
+        if (this.moduleObject.env !== 'develop') {
+          if (this.propData.isShowDanmu) {
+            this.isShowBarrage = true
+            this.addDanmaBtn(false)
+          }
+          this.createFullScreenBtn(false)
+        }
       })
-
     },
     init() {
       this.handleStyle();
       this.initBarrageList()
-      let funcName = null, resourceVideo = null
-      // if (this.moduleObject.env === 'develop') {
-      this.resourceVideo = {
-        src: 'https://vd3.bdstatic.com/mda-kg13n2ya88655a3g/hd/mda-kg13n2ya88655a3g.mp4',
-        type: "video/mp4"
-      }
-      this.$nextTick(() => {
+      let funcName = null, result = null
+      if (this.moduleObject.env === 'develop') {
+        this.resourceVideo = {
+          src: 'https://vd3.bdstatic.com/mda-kg13n2ya88655a3g/hd/mda-kg13n2ya88655a3g.mp4',
+          type: "video/mp4"
+        }
         this.renderVideo()
-      })
-      return
-      // }
-      // switch (this.propData.dataSourceType) {
-      //   case 'dataSource':
-      //     IDM.datasource.request(this.propData?.dataSource?.[0]?.id, {
-      //       moduleObject: this.moduleObject,
-      //       param: this.handleParamter()
-      //     }, (res) => {
-      //       if (res.code == 200) {
-      //         this.resourceVideo = res.data
-      //         this.renderVideo()
-      //         return
-      //       }
-      //       IDM.message.error(res.message)
-      //     }, (err) => {
+        return
+      }
+      switch (this.propData.dataSourceType) {
+        case 'dataSource':
+          IDM.datasource.request(this.propData?.dataSource?.[0]?.id, {
+            moduleObject: this.moduleObject,
+            param: this.handleParamter()
+          }, (res) => {
+            if (res.code == 200) {
+              this.resourceVideo = res.data.resourceVideo
+              this.initBarrageList(res.data?.danmuList)
+              this.renderVideo()
+              return
+            }
+            IDM.message.error(res.message)
+          }, (err) => {
 
-      //     })
-      //     break
-      //   case 'customFunc':
-      //     funcName = this.propData?.resourceFun?.[0].name
-      //     resourceVideo = window?.[funcName].call(this, this.handleParamter())
-      //     if (resourceVideo) {
-      //       this.renderVideo()
-      //     }
-      //     break
-      //   case 'pageCommonInterface':
-      //     break
-      // }
+          })
+          break
+        case 'customFunc':
+          funcName = this.propData?.resourceFun?.[0].name
+          result = window?.[funcName].call(this, this.handleParamter())
+          if (result?.resourceVideo) {
+            this.resourceVideo = result.resourceVideo
+            this.renderVideo()
+          }
+          if (result?.danmuList) {
+            this.initBarrageList(result?.danmuList)
+          }
+          break
+        case 'pageCommonInterface':
+          break
+      }
     },
     getExpressData(dataName, dataFiled, resultData) {
       //给defaultValue设置dataFiled的值
@@ -280,11 +311,14 @@ export default {
         return;
       }
       if (object.key == this.propData.dataName) {
-        this.resourceVideo = this.getExpressData(this.propData.dataName, this.propData.dataFiled, object.data);
-        if (this.resourceVideo) {
+        const result = this.getExpressData(this.propData.dataName, this.propData.dataFiled, object.data);
+        if (result?.resourceVideo) {
+          this.resourceVideo = result.resourceVideo
           this.renderVideo()
         }
-        // this.$set(this.propData, "fontContent", this.getExpressData(this.propData.dataName, this.propData.dataFiled, object.data));
+        if (result?.danmuList) {
+          this.initBarrageList(result.danmuList)
+        }
       }
     },
   },
@@ -339,5 +373,13 @@ export default {
 
 .video-js .danmu-open {
   background: #ccc;
+}
+
+.video-js .danmu-menu-button>.vjs-menu-button .vjs-control-text {
+  clip: unset;
+  width: 35px;
+  height: 20px;
+  top: 9px;
+  left: 2px;
 }
 </style>
