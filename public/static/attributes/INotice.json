@@ -23,10 +23,26 @@
                 {
                     "type": "inputNumber",
                     "layoutType": "inline",
-                    "text": "停留时间",
+                    "text": "延迟时间",
                     "bindKey": "delay",
-                    "desc": "自动播放停留时间，单位：毫秒",
-                    "default": 3000
+                    "desc": "动画延迟时间，单位：s",
+                    "default": 0.2
+                },
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "滚动速率",
+                    "bindKey": "speed",
+                    "desc": "滚动速率，单位：px/s",
+                    "default": 60
+                },
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "公告间隔",
+                    "bindKey": "itemSpan",
+                    "desc": "设置公告间隔，单位px",
+                    "default": 20
                 },
                 {
                     "type": "input",
@@ -34,24 +50,6 @@
                     "text": "左侧文本",
                     "bindKey": "leftText",
                     "default": "通知公告"
-                },
-                {
-                    "type": "radio",
-                    "styleType": "radio",
-                    "layoutType": "inline",
-                    "text": "滚动方向",
-                    "bindKey": "direction",
-                    "dictionary": [
-                        {
-                            "label": "横向",
-                            "value": "horizontal"
-                        },
-                        {
-                            "label": "纵向",
-                            "value": "vertical"
-                        }
-                    ],
-                    "default": "horizontal"
                 }
             ]
         },

@@ -123,6 +123,21 @@
             "desc": "点击？查看高级设置用法指南",
             "children": [
                 {
+                    "type": "pageModuleSelect",
+                    "layoutType": "inline",
+                    "text": "联动组件",
+                    "desc": "选择点击菜单需要联动的组件",
+                    "bindKey": "triggerComponents",
+                    "multiple": true
+                },
+                {
+                    "type": "input",
+                    "layoutType": "inline",
+                    "text": "消息类型",
+                    "bindKey": "messageType",
+                    "default": "addTab"
+                },
+                {
                     "type": "select",
                     "layoutType": "inline",
                     "text": "动态内容",
@@ -147,7 +162,7 @@
                 {
                     "type": "dataSourceSelect",
                     "layoutType": "inline",
-                    "text": "导航数据",
+                    "text": "数据源",
                     "display": "@[dataSourceType === 'dataSource']",
                     "desc": "导航数据源，返回格式见组件文档详情",
                     "bindKey": "dataSource"

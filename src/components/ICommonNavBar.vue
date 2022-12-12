@@ -2,7 +2,7 @@
   <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
     <a-menu mode="horizontal" :selectedKeys="selectedKeys" @click="menuClick" @select="handleSelect">
       <template v-for="item in menuList">
-        <i-sub-menu v-if="item.children && item.children.length > 0" :key="item.id" :menu-info="item" />
+        <i-sub-menu v-if="item.children && item.children.length > 0" :moduleObject="moduleObject" :key="item.id" :menu-info="item" />
         <a-menu-item v-else :key="item.id">
           <span>{{ item.title }}</span>
         </a-menu-item>
@@ -17,6 +17,12 @@ const defaultSelectedKeys = ['1'],  // 默认选中的菜单
     {
       id: '1',
       title: '首页',
+      children: [
+        {
+          id: '1-1',
+          title: '首页11',
+        }
+      ]
     },
     {
       id: '2',
@@ -42,6 +48,7 @@ export default {
       propData: this.$root.propData.compositeAttr || {},
       menuList: [],
       selectedKeys: [],
+      clickItem: null
     }
   },
   created() {
@@ -54,7 +61,7 @@ export default {
       this.convertAttrToStyleObject();
     },
     convertAttrToStyleObject() {
-      const styleObject = {}, itemStyleObj = {}, noSelectItemObj = {}, selectItemObj = {};
+      const styleObject = {},bgColorObj = {}, itemStyleObj = {}, noSelectItemObj = {}, selectItemObj = {};
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
           const element = this.propData[key];
@@ -76,6 +83,7 @@ export default {
               break
             case "bgColor":
               styleObject['background-color'] = element?.hex8;
+              bgColorObj['background-color'] = element?.hex8 + ' !important';
               break;
             case "border":
               IDM.style.setBorderStyle(styleObject, element)
@@ -93,10 +101,29 @@ export default {
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item', itemStyleObj);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item:not(.ant-menu-item-selected)', noSelectItemObj);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item.ant-menu-item-selected', selectItemObj);
+      window.IDM.setStyleToPageHead('.idm-common-nav-popup-' + this.moduleObject.id + ' .ant-menu', bgColorObj);
       this.initData();
     },
-    menuClick({ item }) {
-      console.log(item)
+    handleFindMenuItem(menuList, key) {
+      menuList.forEach(el => {
+        if (el.id == key) {
+          this.clickItem = el
+          return
+        }
+        if (!el.children || el.children.length == 0) return
+        this.handleFindMenuItem(el.children, key)
+      })
+    },
+    menuClick({ key }) {
+      this.handleFindMenuItem(this.menuList, key)
+      const funcName = this.propData?.customClickFunction?.[0]?.name
+      const result = window?.[funcName]?.call(this, this.clickItem)
+      if (result === false) return
+      this.sendBroadcastMessage({
+        type: this.propData.messageType,
+        rangeModule: this.propData.triggerComponents.map(el => el.moduleId),
+        message: this.clickItem
+      })
     },
     handleSelect({ selectedKeys }) {
       this.selectedKeys = selectedKeys

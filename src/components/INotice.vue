@@ -6,20 +6,19 @@
       </div>
     </div>
     <div class="notice-right">
-      <swiper ref="swiper" class="swiper" :options="swiperOption" :style="`height: ${propData && propData.height}`">
-        <swiper-slide class="swiper-slide idm-notice-box-swiper-item-container " v-for="(item, index) in componentData"
-          :key="index">
-          <div class="idm-notice-text" @click="handleItemClick">{{ moduleObject.env === 'develop' ? item['text'] : IDM.express.replace(`@[${propData &&
-              propData.noticeFieldTitle}]`, item, true)
-          }}</div>
-        </swiper-slide>
-        <div slot="pagination"></div>
-      </swiper>
+      <van-notice-bar scrollable :speed="propData.speed" :delay="propData.delay">
+        <div>
+          <span v-for="item, key in componentData" :key="key" class="idm-notice-text" @click="handleItemClick(item)">{{ moduleObject.env === 'develop'
+              ? item['text'] :
+              IDM.express.replace(`@[${propData &&
+                propData.noticeFieldTitle}]`, item, true)
+          }}</span>
+        </div>
+      </van-notice-bar>
     </div>
   </div>
 </template>
 <script>
-import { Swiper, SwiperSlide } from 'vue-awesome-swiper'
 import "swiper/css/swiper.min.css";
 const list = [
   {
@@ -41,11 +40,12 @@ const list = [
     text: '6666666666666666666666666666'
   }
 ]
+import NoticeBar from 'vant/lib/notice-bar';
+import 'vant/lib/notice-bar/style';
 export default {
   name: 'INotice',
   components: {
-    Swiper,
-    SwiperSlide
+    [NoticeBar.name]: NoticeBar
   },
   data() {
     return {
@@ -53,20 +53,6 @@ export default {
       propData: this.$root.propData.compositeAttr || {},
       componentData: []
     }
-  },
-  computed: {
-    swiperOption() {
-      return {
-        // autoplay: false,
-        autoplay: {                      //自动播放
-          delay: this.propData.delay || 3000,
-          disableOnInteraction: false
-        },
-        speed: 500,                                               //播放速度
-        loop: true,                                               //循环播放
-        pagination: false,
-      }
-    },
   },
   created() {
     this.moduleObject = this.$root.moduleObject
@@ -109,7 +95,7 @@ export default {
       }
     },
     convertAttrToStyleObject() {
-      var styleObject = {}, leftStyleObj = {}, rightStyleObj = {}, rightTextObj = {}, triangleObj = {}, bannerItemObj = {}
+      var styleObject = {}, leftStyleObj = {}, rightStyleObj = {}, rightTextObj = {}, triangleObj = {}
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
           const element = this.propData[key];
@@ -118,9 +104,12 @@ export default {
           }
           switch (key) {
             case "width":
+              styleObject[key] = element;
+              break
             case "height":
               styleObject[key] = element;
-              bannerItemObj['height'] = element + ' !important'
+              rightStyleObj['height'] = element
+              rightStyleObj['line-height'] = element
               break;
             case 'box':
               IDM.style.setBoxStyle(styleObject, element)
@@ -154,16 +143,23 @@ export default {
               triangleObj['width'] = element
               triangleObj['right'] = '-' + element
               break
+            case 'itemSpan':
+              rightTextObj['margin-right'] = element + 'px'
+              break
+
 
           }
         }
       }
       window.IDM.setStyleToPageHead(this.moduleObject.id, styleObject);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .notice-left', leftStyleObj);
-      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .notice-right', rightStyleObj);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .van-notice-bar', {
+        'padding': 0,
+        'background-color': 'transparent',
+        ...rightStyleObj
+      });
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .idm-notice-text', rightTextObj);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .notice-left::after', triangleObj);
-      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .idm-notice-box-swiper-item-container', bannerItemObj);
       this.initData();
     },
     reload() {
@@ -176,7 +172,6 @@ export default {
 
       if (this.moduleObject.env === 'develop') {
         this.componentData = list
-        this.init()
         return
       }
 
@@ -189,7 +184,6 @@ export default {
             }
           }, (res) => {
             this.componentData = res
-            this.init()
             return
           }, (err) => {
             IDM.message.error(err.message)
@@ -200,19 +194,8 @@ export default {
           break;
       }
     },
-    init() {
-      this.$nextTick(() => {
-        this.$refs.swiper.$swiper.changeDirection(this.propData.direction)
-        this.$refs.swiper.$swiper.slideToLoop(0, 0, false)
-      })
-    },
     receiveBroadcastMessage(object) {
       console.log("组件收到消息", object)
-      if (object.type && object.type == "linkageShowModule") {
-        this.showThisModuleHandle();
-      } else if (object.type && object.type == "linkageHideModule") {
-        this.hideThisModuleHandle();
-      }
     },
     getExpressData(dataName, dataFiled, resultData) {
       //给defaultValue设置dataFiled的值
@@ -242,8 +225,6 @@ export default {
       if (object.key == this.propData.dataName) {
         // this.propData.fontContent = this.getExpressData(this.propData.dataName,this.propData.dataFiled,object.data);
         this.componentData = this.getExpressData(this.propData.dataName, this.propData.dataFiled, object.data)
-
-        this.init()
       }
     },
     sendBroadcastMessage(object) {
@@ -297,7 +278,18 @@ export default {
     overflow: hidden;
     height: 100%;
   }
-  .idm-notice-box-swiper-item-container{
+
+  .idm-notice-text {
+    &:first-child {
+      margin-left: 0 !important;
+    }
+
+    &:last-child {
+      margin-right: 0 !important;
+    }
+  }
+
+  .idm-notice-box-swiper-item-container {
     display: flex;
     align-items: center;
   }

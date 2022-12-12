@@ -13,9 +13,10 @@
     "ant-design-vue": "^1.7.8",
     "core-js": "^3.6.5",
     "sass-loader": "^8.0.2",
+    "swiper": "^5.3.6",
+    "vant": "latest-v2",
     "video.js": "^7.20.3",
     "vue": "^2.6.11",
-    "swiper": "^5.3.6",
     "vue-awesome-swiper": "^4.1.1",
     "vue-seamless-scroll": "^1.1.23"
   },

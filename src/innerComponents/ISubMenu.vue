@@ -1,5 +1,5 @@
 <template>
-    <a-sub-menu :key="menuInfo.key" popupClassName="idm-common-nav-popup" v-bind="$props" v-on="$listeners">
+    <a-sub-menu :key="menuInfo.key" :popupClassName="`idm-common-nav-popup-` + moduleObject.id" v-bind="$props" v-on="$listeners">
         <span slot="title">
             <span>{{ menuInfo.title }}</span>
         </span>
@@ -21,6 +21,10 @@ export default {
         // 解构a-sub-menu的属性
         ...Menu.SubMenu.props,
         menuInfo: {
+            type: Object,
+            default: () => ({}),
+        },
+        moduleObject: {
             type: Object,
             default: () => ({}),
         },
