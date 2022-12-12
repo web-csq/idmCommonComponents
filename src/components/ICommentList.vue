@@ -139,31 +139,6 @@ export default {
         this.setIsReplyFalse(arr)
         this.$set(this.componentData, 'rows', arr)
       })
-      // this.propData.commentListInterface &&
-      //   window.IDM.http
-      //     .get(this.propData.commentListInterface, {
-      //       ...this.commonParam(),
-      //       showLike: this.propData.isFabulousNumber,
-      //       page: this.currentPage,
-      //       commentId: item.id,
-      //       sortDir: this.currentSort,
-      //       showNum: 100,
-      //       showAvatar: this.propData.isShowAvatar
-      //     })
-      //     .then((res) => {
-      //       if (res.status == 200 && res.data.code == 200) {
-      //         item.isShowMore = false
-      //         item.children = res.data.data.rows
-
-      //         this.$set(this.componentData['rows'], index, item)
-      //         const arr = _.cloneDeep(this.componentData.rows)
-      //         this.setIsReplyFalse(arr)
-      //         this.$set(this.componentData, 'rows', arr)
-      //       } else {
-      //         IDM.message.error(res.data.message)
-      //       }
-      //     })
-      //     .catch(function (error) { })
     },
     // 显示回复
     showReply({ index, sIndex }) {
@@ -205,33 +180,6 @@ export default {
         }
         IDM.message.success(res.message)
       })
-
-
-      // const requestUrl = item.isLike ? this.propData.unLikeCommentInterface : this.propData.likeCommentInterface
-      // requestUrl &&
-      //   window.IDM.http.post(requestUrl, {
-      //     ...this.commonParam(),
-      //     commentId: item.id
-      //   })
-      //     .then((res) => {
-      //       if (res.status == 200 && res.data.code == 200) {
-      //         if (item.isLike) {
-      //           item.likeNum--
-      //         } else {
-      //           item.likeNum++
-      //         }
-      //         item.isLike = !item.isLike
-      //         if (sIndex === -1) {
-      //           this.$set(this.componentData['rows'], index, item)
-      //         } else {
-      //           this.$set(this.componentData['rows'][index].children, sIndex, item)
-      //         }
-      //         IDM.message.success(res.data.message)
-      //         return
-      //       }
-      //       IDM.message.error(res.data.message)
-      //     })
-      //     .catch(function (error) { })
     },
     // 删除
     handleDelete({ item, index, sIndex }) {
@@ -260,29 +208,6 @@ export default {
             this.$set(this.componentData, 'rows', arr)
             IDM.message.success(res.message)
           })
-
-
-          // this.propData.deleteCommentInterface &&
-          //   window.IDM.http
-          //     .post(this.propData.deleteCommentInterface, {
-          //       ...this.commonParam(),
-          //       commentId: item.id
-          //     })
-          //     .then((res) => {
-          //       if (res.status == 200 && res.data.code == 200) {
-          //         const arr = _.cloneDeep(this.componentData.rows)
-          //         if (sIndex === -1) {
-          //           arr.splice(index, 1)
-          //         } else {
-          //           arr[index].children.splice(sIndex, 1)
-          //         }
-          //         this.$set(this.componentData, 'rows', arr)
-          //         IDM.message.success(res.data.message)
-          //         return
-          //       }
-          //       IDM.message.error(res.data.message)
-          //     })
-          //     .catch(function (error) { })
         },
         onCancel() {
           console.log('Cancel')
@@ -316,26 +241,6 @@ export default {
         IDM.message.success(res.message)
         cb()
       })
-
-
-
-      // this.propData.addCommentInterface &&
-      //   window.IDM.http
-      //     .post(this.propData.addCommentInterface, {
-      //       ...this.commonParam(),
-      //       content,
-      //       commentId,
-      //       showAvatar: false
-      //     })
-      //     .then((res) => {
-      //       if (res.status == 200 && res.data.code == 200) {
-      //         IDM.message.success(res.data.message)
-      //         cb()
-      //         return
-      //       }
-      //       IDM.message.error(res.data.message)
-      //     })
-      //     .catch(function (error) { })
     },
     // 发布评论
     handlePublish() {
@@ -506,41 +411,6 @@ export default {
 
         this.componentData = res.data.data
       })
-
-      // this.propData.commentListInterface &&
-      //   window.IDM.http
-      //     .get(this.propData.commentListInterface, {
-      //       ...this.commonParam(),
-      //       showLike: this.propData.isFabulousNumber,
-      //       page: this.currentPage,
-      //       showNum: this.propData.showNum,
-      //       childShowNum: this.propData.childShowNum,
-      //       sortDir: this.currentSort,
-      //       showAvatar: this.propData.isShowAvatar
-      //     })
-      //     .then((res) => {
-      //       if (res.status == 200 && res.data.code == 200) {
-      //         res.data.data.rows.forEach(el => {
-      //           if (el.total > el.children.length) {
-      //             el.isShowMore = true
-      //           }
-      //         })
-      //         if (isClear) {
-      //           this.componentData.rows = []
-      //         }
-      //         res.data.data.rows = [...this.componentData.rows, ...res.data.data.rows]
-      //         if (res.data.data.total > res.data.data.rows.length) {
-      //           this.hasMore = true
-      //         } else {
-      //           this.hasMore = false
-      //         }
-
-      //         this.componentData = res.data.data
-      //       } else {
-      //         IDM.message.error(res.data.message)
-      //       }
-      //     })
-      //     .catch(function (error) { })
     },
     initData() {
       if (this.propData.sortType && this.propData.sortType.length > 0) {

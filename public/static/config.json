@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "lasttime": "2022-12-08 10:31:21",
+  "lasttime": "2022-12-12 09:18:06",
   "author": "申龙",
   "className": "idmCommonComponent",
   "module": [
@@ -36,6 +36,13 @@
       "classId": "idm.component.idmCommonComponent.icommonnavbar",
       "comName": "通用导航栏",
       "className": "ICommonNavBar",
+      "comType": "common",
+      "comLangue": "vue"
+    },
+    {
+      "classId": "idm.component.idmCommonComponent.inotice",
+      "comName": "通知公告",
+      "className": "INotice",
       "comType": "common",
       "comLangue": "vue"
     }

@@ -1,14 +1,47 @@
 <template>
   <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
+    <a-menu mode="horizontal" :selectedKeys="selectedKeys" @click="menuClick" @select="handleSelect">
+      <template v-for="item in menuList">
+        <i-sub-menu v-if="item.children && item.children.length > 0" :key="item.id" :menu-info="item" />
+        <a-menu-item v-else :key="item.id">
+          <span>{{ item.title }}</span>
+        </a-menu-item>
+      </template>
+    </a-menu>
   </div>
 </template>
 <script>
+import ISubMenu from '../innerComponents/ISubMenu.vue'
+const defaultSelectedKeys = ['1'],  // 默认选中的菜单
+  menuList = [
+    {
+      id: '1',
+      title: '首页',
+    },
+    {
+      id: '2',
+      title: '组件工厂',
+    },
+    {
+      id: '3',
+      title: '组件市场',
+    },
+    {
+      id: '4',
+      title: '业务组件',
+    }
+  ]
 export default {
   name: 'ICommonNavBar',
+  components: {
+    ISubMenu
+  },
   data() {
     return {
       moduleObject: {},
-      propData: this.$root.propData.compositeAttr || {}
+      propData: this.$root.propData.compositeAttr || {},
+      menuList: [],
+      selectedKeys: [],
     }
   },
   created() {
@@ -21,7 +54,7 @@ export default {
       this.convertAttrToStyleObject();
     },
     convertAttrToStyleObject() {
-      var styleObject = {};
+      const styleObject = {}, itemStyleObj = {}, noSelectItemObj = {}, selectItemObj = {};
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
           const element = this.propData[key];
@@ -30,32 +63,70 @@ export default {
           }
           switch (key) {
             case "width":
-            case "height":
               styleObject[key] = element;
+              break;
+            case "height":
+              styleObject['line-height'] = element
+              break;
+            case "box":
+              IDM.style.setBoxStyle(styleObject, element)
+              break;
+            case 'itemBox':
+              IDM.style.setBoxStyle(itemStyleObj, element)
+              break
+            case "bgColor":
+              styleObject['background-color'] = element?.hex8;
+              break;
+            case "border":
+              IDM.style.setBorderStyle(styleObject, element)
+              break;
+            case "font":
+              IDM.style.setFontStyle(noSelectItemObj, element)
+              break;
+            case 'selectFont':
+              IDM.style.setFontStyle(selectItemObj, element)
               break;
           }
         }
       }
-      window.IDM.setStyleToPageHead(this.moduleObject.id, styleObject);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu', styleObject);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item', itemStyleObj);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item:not(.ant-menu-item-selected)', noSelectItemObj);
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item.ant-menu-item-selected', selectItemObj);
       this.initData();
+    },
+    menuClick({ item }) {
+      console.log(item)
+    },
+    handleSelect({ selectedKeys }) {
+      this.selectedKeys = selectedKeys
     },
     reload() {
       //请求数据源
       this.initData();
     },
     initData() {
-      let that = this;
+      if (this.moduleObject.env === 'develop') {
+        this.menuList = menuList
+        this.selectedKeys = defaultSelectedKeys
+        return
+      }
       //所有地址的url参数转换
-      var params = that.commonParam();
+      var params = this.commonParam();
       switch (this.propData.dataSourceType) {
-        case "customInterface":
-          this.propData.customInterfaceUrl && window.IDM.http.get(this.propData.customInterfaceUrl, params)
-            .then((res) => {
-              //res.data
-              that.$set(that.propData, "fontContent", that.getExpressData("resultData", that.propData.dataFiled, res.data));
-              // that.propData.fontContent = ;
-            })
-            .catch(function (error) { });
+        case "dataSource":
+          IDM.datasource.request(this.propData?.dataSource?.[0]?.id, {
+            moduleObject: this.moduleObject,
+            param: {}
+          }, (res) => {
+            if (res.code == 200) {
+              this.menuList = res.data.menuList
+              this.selectedKeys = res.data.defaultSelectedKeys
+              console.log(this.selectedKeys)
+            } else {
+              IDM.message.error(res.message)
+            }
+          })
           break;
         case "pageCommonInterface":
           //使用通用接口直接跳过，在setContextValue执行
@@ -65,30 +136,28 @@ export default {
             var resValue = "";
             try {
               resValue = window[this.propData.customFunction[0].name] && window[this.propData.customFunction[0].name].call(this, { ...params, ...this.propData.customFunction[0].param, moduleObject: this.moduleObject });
+              if (resValue?.menuList) this.menuList = resValue?.menuList
+              if (resValue?.selectedKeys) this.selectedKeys = resValue?.selectedKeys
             } catch (error) {
             }
-            that.propData.fontContent = resValue;
           }
           break;
       }
     },
     receiveBroadcastMessage(object) {
       console.log("组件收到消息", object)
-      if (object.type && object.type == "linkageShowModule") {
-        this.showThisModuleHandle();
-      } else if (object.type && object.type == "linkageHideModule") {
-        this.hideThisModuleHandle();
-      }
+
     },
     setContextValue(object) {
       console.log("统一接口设置的值", object);
       if (object.type != "pageCommonInterface") {
         return;
       }
-      //这里使用的是子表，所以要循环匹配所有子表的属性然后再去设置修改默认值
-      if (object.key == this.propData.dataName) {
-        // this.propData.fontContent = this.getExpressData(this.propData.dataName,this.propData.dataFiled,object.data);
-        this.$set(this.propData, "fontContent", this.getExpressData(this.propData.dataName, this.propData.dataFiled, object.data));
+      if (object.key === 'menuList') {
+        this.menuList = object.data
+      }
+      if (object.key === 'selectedKeys') {
+        this.selectedKeys = object.data
       }
     },
     sendBroadcastMessage(object) {
