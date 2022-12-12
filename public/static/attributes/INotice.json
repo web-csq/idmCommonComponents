@@ -123,7 +123,7 @@
                 {
                     "type": "input",
                     "layoutType": "inline",
-                    "text": "左侧宽宽",
+                    "text": "左侧宽",
                     "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
                     "bindKey": "leftWidth",
                     "default": "100px"
@@ -267,7 +267,7 @@
                     "layoutType": "inline",
                     "text": "数据模式",
                     "bindKey": "dataSourceType",
-                    "default": "pageCommonInterface",
+                    "default": "dataSource",
                     "dictionary": [
                         {
                             "label": "数据源",
