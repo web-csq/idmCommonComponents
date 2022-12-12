@@ -26,7 +26,7 @@
                     "text": "延迟时间",
                     "bindKey": "delay",
                     "desc": "动画延迟时间，单位：s",
-                    "default": 0.2
+                    "default": 1
                 },
                 {
                     "type": "inputNumber",
