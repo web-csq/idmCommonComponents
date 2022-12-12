@@ -7,13 +7,12 @@
     </div>
     <div class="notice-right">
       <van-notice-bar scrollable :speed="propData.speed" :delay="propData.delay">
-        <div>
-          <span v-for="item, key in componentData" :key="key" class="idm-notice-text" @click="handleItemClick(item)">{{ moduleObject.env === 'develop'
+        <span v-for="item, key in componentData" :key="key" class="idm-notice-text" @click="handleItemClick(item)">{{
+            moduleObject.env === 'develop'
               ? item['text'] :
               IDM.express.replace(`@[${propData &&
                 propData.noticeFieldTitle}]`, item, true)
-          }}</span>
-        </div>
+        }}</span>
       </van-notice-bar>
     </div>
   </div>
@@ -61,6 +60,7 @@ export default {
   },
   methods: {
     handleItemClick(item) {
+      console.log(item.text)
       if (this.moduleObject.env === 'develop') return
       const funcName = this.propData?.customClickFunction?.[0]?.name
       const result = window?.[funcName]?.call(this, item)
@@ -280,6 +280,8 @@ export default {
   }
 
   .idm-notice-text {
+    cursor: pointer;
+
     &:first-child {
       margin-left: 0 !important;
     }
