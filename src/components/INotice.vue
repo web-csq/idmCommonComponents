@@ -9,7 +9,7 @@
       <swiper ref="swiper" class="swiper" :options="swiperOption" :style="`height: ${propData && propData.height}`">
         <swiper-slide class="swiper-slide idm-notice-box-swiper-item-container " v-for="(item, index) in componentData"
           :key="index">
-          <div class="idm-notice-text" @click="handleItemClick">{{ IDM.express.replace(`@[${propData &&
+          <div class="idm-notice-text" @click="handleItemClick">{{ moduleObject.env === 'develop' ? item['text'] : IDM.express.replace(`@[${propData &&
               propData.noticeFieldTitle}]`, item, true)
           }}</div>
         </swiper-slide>
@@ -188,13 +188,11 @@ export default {
               ...params
             }
           }, (res) => {
-            if (res.code == 200) {
-              this.componentData = res.data
-              this.init()
-              return
-            }
-            IDM.message.error(res.message)
+            this.componentData = res
+            this.init()
+            return
           }, (err) => {
+            IDM.message.error(err.message)
           })
           break;
         case "pageCommonInterface":
