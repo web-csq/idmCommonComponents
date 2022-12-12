@@ -101,7 +101,7 @@ export default {
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item', itemStyleObj);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item:not(.ant-menu-item-selected)', noSelectItemObj);
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .ant-menu .ant-menu-item.ant-menu-item-selected', selectItemObj);
-      window.IDM.setStyleToPageHead('.idm-common-nav-popup-' + this.moduleObject.id + ' .ant-menu', bgColorObj);
+      // window.IDM.setStyleToPageHead('.idm-common-nav-popup-' + this.moduleObject.id + ' .ant-menu', bgColorObj);
       this.initData();
     },
     handleFindMenuItem(menuList, key) {

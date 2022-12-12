@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     handleItemClick(item) {
-      console.log(item.text)
       if (this.moduleObject.env === 'develop') return
       const funcName = this.propData?.customClickFunction?.[0]?.name
       const result = window?.[funcName]?.call(this, item)
