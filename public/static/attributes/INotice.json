@@ -93,12 +93,12 @@
                     "default": "60px"
                 },
                 {
-                    "type": "input",
+                    "type": "inputNumber",
                     "layoutType": "inline",
                     "text": "三角形宽",
-                    "desc": "填写auto则为自适应，或者使用px、%、vw等单位，比如100%、100px、100vw等等",
+                    "desc": "单位：px",
                     "bindKey": "triangleWidth",
-                    "default": "20px"
+                    "default": 20
                 },
                 {
                     "type": "box",

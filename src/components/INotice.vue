@@ -139,8 +139,8 @@ export default {
               IDM.style.setFontStyle(rightTextObj, element)
               break
             case 'triangleWidth':
-              triangleObj['width'] = element
-              triangleObj['right'] = '-' + element
+              triangleObj['width'] = element + 'px'
+              triangleObj['right'] = '-' + (element - 0.5) + 'px'
               break
             case 'itemSpan':
               rightTextObj['margin-right'] = element + 'px'
