@@ -50,7 +50,8 @@ export default {
     return {
       moduleObject: {},
       propData: this.$root.propData.compositeAttr || {},
-      componentData: []
+      componentData: [],
+      currentPage: 1
     }
   },
   created() {
@@ -188,6 +189,29 @@ export default {
             IDM.message.error(err.message)
           })
           break;
+        case 'customInterface':
+          this.propData.customInterface &&
+            window.IDM.http
+              .get(this.propData.customInterface, {
+                ...params,
+                columnId:
+                  this.propData.columnId || this.commonParam().columnId,
+                start: this.currentPage,
+                limit: this.propData.contentNumber
+              })
+              .then((res) => {
+                console.log(res)
+                if (res.status == 200 && res.data.code == 200) {
+                  this.componentData = IDM.express.replace(
+                    `@[${this.propData.dataFiled}]`,
+                    res.data.data
+                  )
+                } else {
+                  IDM.message.error(res.data.message)
+                }
+              })
+              .catch(function (error) { })
+          break
         case "pageCommonInterface":
           //使用通用接口直接跳过，在setContextValue执行
           break;
@@ -240,7 +264,7 @@ export default {
           window.IDM.broadcast && window.IDM.broadcast.pageModule
             ? window.IDM.broadcast.pageModule.id
             : "",
-        urlData: JSON.stringify(urlObject),
+        ...urlObject,
       };
       return params;
     },
