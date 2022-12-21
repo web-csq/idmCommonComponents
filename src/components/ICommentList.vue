@@ -419,10 +419,10 @@ export default {
       } else {
         this.componentSortTypeList = []
       }
-      if (!this.commonParam().columnId || !this.commonParam().contentId) {
-        this.componentData.rows = this.setIsReplyFalse(getCommentListData.call(this))
-        return
-      }
+      // if (!this.commonParam().columnId || !this.commonParam().contentId) {
+      //   this.componentData.rows = this.setIsReplyFalse(getCommentListData.call(this))
+      //   return
+      // }
       this.getCommentList(true)
     },
     receiveBroadcastMessage(object) {
