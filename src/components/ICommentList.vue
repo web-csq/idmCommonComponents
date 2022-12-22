@@ -408,8 +408,7 @@ export default {
         } else {
           this.hasMore = false
         }
-
-        this.componentData = res.data.data
+        this.componentData = res.data
       })
     },
     initData() {
