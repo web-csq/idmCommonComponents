@@ -57,6 +57,25 @@
                     ]
                 },
                 {
+                    "type": "radio",
+                    "styleType": "radio",
+                    "layoutType": "inline",
+                    "text": "可拖拽",
+                    "bindKey": "isDragger",
+                    "desc": "设置textarea是否可拖拽",
+                    "default": true,
+                    "dictionary": [
+                        {
+                            "label": "是",
+                            "value": true
+                        },
+                        {
+                            "label": "否",
+                            "value": false
+                        }
+                    ]
+                },
+                {
                     "type": "checkbox",
                     "layoutType": "inline",
                     "text": "排序显示",
@@ -80,6 +99,22 @@
                     "desc": "一级评论展示条数",
                     "bindKey": "showNum",
                     "default": 10
+                },
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "最小行",
+                    "desc": "设置textarea的minRows",
+                    "bindKey": "minRows",
+                    "default": 3
+                },
+                {
+                    "type": "inputNumber",
+                    "layoutType": "inline",
+                    "text": "最大行",
+                    "desc": "设置textarea的maxRows",
+                    "bindKey": "maxRows",
+                    "default": 3
                 },
                 {
                     "type": "inputNumber",

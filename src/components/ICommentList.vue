@@ -2,7 +2,7 @@
   <div idm-ctrl="idm_module" :id="moduleObject.id" :idm-ctrl-id="moduleObject.id">
     <div class="textarea-wrapper">
       <a-textarea class="m-textarea" :placeholder="propData.textareaPlaceholder" :maxLength="propData.maxLength"
-        :auto-size="{ minRows: 3, maxRows: 5 }" allowClear v-model="content" />
+        :auto-size="{ minRows: propData.minRows, maxRows: propData.maxRows }" allowClear v-model="content" />
       <span class="m-count">{{ textLength }}/{{ propData.maxLength }}</span>
     </div>
 
@@ -262,7 +262,8 @@ export default {
         authorObj = {},
         textMarginObj = {},
         subBoxObj = {},
-        contentObj = {}
+        contentObj = {},
+        textareaObj = {}
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
           const element = this.propData[key]
@@ -328,6 +329,9 @@ export default {
             case 'contentHeight':
               contentObj['height'] = element
               break
+            case 'isDragger':
+                textareaObj['resize'] = element ? 'auto' : 'none'
+              break
 
           }
         }
@@ -341,6 +345,7 @@ export default {
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .mr-10', textMarginObj)
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .comment-list-sub-comment', subBoxObj)
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .common-list-container', contentObj)
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' textarea', textareaObj)
       this.initData()
     },
 
