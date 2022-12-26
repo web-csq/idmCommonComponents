@@ -11,25 +11,27 @@
       <a-select style="width: 140px" v-if="componentSortTypeList.length > 0" :disabled="moduleObject.env === 'develop'"
         v-model="currentSort" @change="handleSelectChange">
         <a-select-option v-for="item in componentSortTypeList" :key="item.value" :value="item.value">{{
-            item.label
-        }}</a-select-option>
+    item.label
+}}</a-select-option>
       </a-select>
     </div>
-    <div v-for="(item, index) in componentData.rows" :key="index" class="comment-list-item">
-      <ICommentItem :propData="propData" :itemData="item" :lIndex="index" :authorId="componentData.authorId"
-        :moduleObject="moduleObject" @showReply="showReply" @handleDelete="handleDelete" @handleBlur="handleBlur"
-        :userInfo="userInfo" @handleSubReply="handleSubReply" @handleLike="handleLike">
-      </ICommentItem>
-      <div class="comment-list-sub-comment" v-for="(items, indexs) in item.children" :key="indexs">
-        <ICommentItem :propData="propData" :lIndex="index" :sIndex="indexs" :itemData="items" :userInfo="userInfo"
-          :authorId="componentData.authorId" :moduleObject="moduleObject" @showReply="showReply"
-          @handleDelete="handleDelete" @handleBlur="handleBlur" @handleSubReply="handleSubReply"
-          @handleLike="handleLike"></ICommentItem>
+    <div class="common-list-container">
+      <div v-for="(item, index) in componentData.rows" :key="index" class="comment-list-item">
+        <ICommentItem :propData="propData" :itemData="item" :lIndex="index" :authorId="componentData.authorId"
+          :moduleObject="moduleObject" @showReply="showReply" @handleDelete="handleDelete" @handleBlur="handleBlur"
+          :userInfo="userInfo" @handleSubReply="handleSubReply" @handleLike="handleLike">
+        </ICommentItem>
+        <div class="comment-list-sub-comment" v-for="(items, indexs) in item.children" :key="indexs">
+          <ICommentItem :propData="propData" :lIndex="index" :sIndex="indexs" :itemData="items" :userInfo="userInfo"
+            :authorId="componentData.authorId" :moduleObject="moduleObject" @showReply="showReply"
+            @handleDelete="handleDelete" @handleBlur="handleBlur" @handleSubReply="handleSubReply"
+            @handleLike="handleLike"></ICommentItem>
+        </div>
+        <div class="d-flex just-c cursor-p" v-if="item.isShowMore" @click="handleSubClickMore(item, index)">查看更多回复
+        </div>
       </div>
-      <div class="d-flex just-c cursor-p" v-if="item.isShowMore" @click="handleSubClickMore(item, index)">查看更多回复
-      </div>
+      <div class="d-flex just-c cursor-p" v-if="hasMore" @click="handleClickMore">加载更多</div>
     </div>
-    <div class="d-flex just-c cursor-p" v-if="hasMore" @click="handleClickMore">加载更多</div>
   </div>
 </template>
 <script>
@@ -259,7 +261,8 @@ export default {
         selectSpeechObj = {},
         authorObj = {},
         textMarginObj = {},
-        subBoxObj = {}
+        subBoxObj = {},
+        contentObj = {}
       for (const key in this.propData) {
         if (this.propData.hasOwnProperty.call(this.propData, key)) {
           const element = this.propData[key]
@@ -322,6 +325,9 @@ export default {
                 subBoxObj['background-color'] = element.hex8
               }
               break
+            case 'contentHeight':
+              contentObj['height'] = element
+              break
 
           }
         }
@@ -334,6 +340,7 @@ export default {
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .common-list-author', authorObj)
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .mr-10', textMarginObj)
       window.IDM.setStyleToPageHead(this.moduleObject.id + ' .comment-list-sub-comment', subBoxObj)
+      window.IDM.setStyleToPageHead(this.moduleObject.id + ' .common-list-container', contentObj)
       this.initData()
     },
 
@@ -499,6 +506,21 @@ export default {
     font-size: 12px;
     bottom: 8px;
     right: 12px;
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+.common-list-container {
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background: #ccc;
   }
 }
 </style>
