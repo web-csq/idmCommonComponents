@@ -45,6 +45,13 @@
       "className": "INotice",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.component.idmCommonComponent.infoList",
+      "comName": "通用信息列表",
+      "className": "IInfoList",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }
