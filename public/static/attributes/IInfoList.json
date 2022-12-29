@@ -207,7 +207,7 @@
               "layoutType": "inline",
               "text": "key",
               "bindKey": "key",
-              "default": ""
+              "default": "1"
             },
             {
               "type": "dataSourceFiledSelect",
@@ -292,7 +292,7 @@
               "text": "key",
               "bindKey": "key",
               "desc": "当此处的key和列配置中的key相同时，此标记会显示在怕匹配的列旁",
-              "default": ""
+              "default": "1"
             },
             {
               "type": "radio",

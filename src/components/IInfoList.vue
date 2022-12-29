@@ -46,10 +46,11 @@
     </div>
     <div key="i-infoList-content" class="i-infoList-content">
       <div
+        key="i-infoList-content-list"
         class="i-infoList-content-list"
-        v-if="data && data.length" 
+        v-show="data && data.length"
         v-infinite-scroll="initData"
-        :infinite-scroll-disabled="loading || end"
+        :infinite-scroll-disabled="end"
         :infinite-scroll-distance="10"
       >
         <div class="i-infoList-row" v-for="item,index in data" :key="index" @click="onRowClick(item, index)">
@@ -89,14 +90,14 @@
             </div>
           </div>
         </div>
-        <div class="i-infoList-content-loading" v-if="loading && propData.loadingDesc">
+        <div class="i-infoList-content-loading" v-show="loading" v-if="propData.loadingDesc">
           <div>{{propData.loadingDesc}}</div>
         </div>
-        <div class="i-infoList-content-end" v-else-if="end && propData.endDesc">
+        <div class="i-infoList-content-end" v-show="end" v-if="propData.endDesc">
           <div>{{propData.endDesc}}</div>
         </div>
       </div>
-      <div class="i-infoList-content-empty" v-else-if="propData.emptyDesc">
+      <div class="i-infoList-content-empty" v-show="!data || !data.length" v-if="propData.emptyDesc">
         <div>{{propData.emptyDesc}}</div>
       </div>
     </div>
@@ -156,6 +157,8 @@ export default {
   watch: {
     'propData.dataSource': {
       handler(value) {
+        this.data = [];
+        this.end = false;
         this.initData();
       },
       deep: true
