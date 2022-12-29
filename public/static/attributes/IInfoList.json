@@ -225,7 +225,7 @@
               "layoutType": "block",
               "text": "点击自定义事件",
               "bindKey": "customFunction",
-              "desc": "入参：{commonParam: 组件信息, customParam: 用户自定义参数, option: 当前系列已有的配置项, chartData: 图表数据源返回的结果, params: 图表的状态，包含下拉、单选框，以及外部传入的参数}，请按照标准格式返回echarts配置项",
+              "desc": "入参：{commonParam: 组件信息, customParam: 用户自定义参数, rowData: 当前行的数据, rowIndex: 当前行的索引值, cellIndex: 当前单元格的索引值, cellKey: 当前单元格的key, data: 整个列表的数据}",
               "multiple": false
             },
             {
@@ -233,7 +233,8 @@
               "layoutType": "inline",
               "text": "此列宽度",
               "bindKey": "cellWidth",
-              "desc": "单位px，%。具体宽度会根据行宽放大或缩小"
+              "default": "100px",
+              "desc": "单位px，%或auto。具体宽度会根据行宽放大或缩小"
             },
             {
               "type": "radio",
@@ -257,12 +258,6 @@
               "default": "flex-start"
             },
             {
-              "type": "box",
-              "layoutType": "block",
-              "text": "内外边距",
-              "bindKey": "cellBox"
-            },
-            {
               "type": "font",
               "layoutType": "block",
               "text": "文字样式",
@@ -276,6 +271,12 @@
                 "fontSize": 14,
                 "fontSizeUnit": "px"
               }
+            },
+            {
+              "type": "box",
+              "layoutType": "block",
+              "text": "内外边距",
+              "bindKey": "cellBox"
             }
           ]
         },
@@ -350,6 +351,7 @@
               "text": "标记名称",
               "desc": "设置tag的文字",
               "bindKey": "name",
+              "default": "专题",
               "display": "@[type=='tag']"
             },
             {
@@ -376,13 +378,6 @@
               "display": "@[type=='icon']"
             },
             {
-              "type": "border",
-              "layoutType": "block",
-              "text": "标记边框",
-              "bindKey": "tagBorder",
-              "display": "@[type=='tag']"
-            },
-            {
               "type": "font",
               "layoutType": "block",
               "text": "文字样式",
@@ -397,6 +392,13 @@
                 "fontSize": 12,
                 "fontSizeUnit": "px"
               }
+            },
+            {
+              "type": "border",
+              "layoutType": "block",
+              "text": "标记边框",
+              "bindKey": "tagBorder",
+              "display": "@[type=='tag']"
             },
             {
               "type": "box",
@@ -1095,8 +1097,8 @@
           "type": "actionSelect",
           "layoutType": "block",
           "text": "行点击自定义函数",
-          "bindKey": "handleChartClick",
-          "desc": "当点击行时会触发此函数，此函数的参数为{chartParams: 原echarts点击事件参数, chartData: 图表数据, params: 数据源入参，包含自身的下拉和单选框，自定义参数，以及由消息传入的参数}",
+          "bindKey": "handleRowClick",
+          "desc": "当点击行时会触发此函数，此函数的参数为{commonParam: 组件信息, customParam: 用户自定义参数, rowData: 当前行的数据, rowIndex: 当前行的索引值, data: 整个列表的数据}",
           "multiple": false
         },
         {

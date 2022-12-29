@@ -52,8 +52,8 @@
         :infinite-scroll-disabled="loading || end"
         :infinite-scroll-distance="10"
       >
-        <div class="i-infoList-row" v-for="item,index in data" :key="index" @click="onRowClick">
-          <div :class="`i-infoList-cell i-infoList-cell-${f.key}`" v-for="f,i in propData.cellsList" :key="i">
+        <div class="i-infoList-row" v-for="item,index in data" :key="index" @click="onRowClick(item, index)">
+          <div :class="`i-infoList-cell i-infoList-cell-${f.key}`" v-for="f,i in propData.cellsList" :key="i" @click="onCellClick(item, index, f, i)">
             <div v-if="leftSignsList && leftSignsList.length" class="left-area">
               <template v-for="s,j in leftSignsList">
                 <template v-if="s.key == f.key && (s.compareField ? s.compareValue ? item[s.compareField] == s.compareValue : item[s.compareField] : true)">
@@ -174,6 +174,8 @@ export default {
     this.getClientWidth();
     this.convertAttrToStyleObject();
     this.convertThemeListAttrToStyleObject();
+    this.convertCellAttrToStyleObject();
+    this.convertSignAttrToStyleObject();
     this.resizeContentWrapperHeight();
     this.initData();
   },
@@ -196,10 +198,27 @@ export default {
         window.open(url, this.propData.moreJumpType || '_block');
       }
     },
-    onRowClick() {
+    onRowClick(item, index) {
       if (this.moduleObject.env !== 'production') {
         return;
       }
+      this.customFunctionHandle(this.propData.handleRowClick, {
+        rowData: item,
+        rowIndex: index,
+        data: this.data
+      })
+    },
+    onCellClick(item, index, f, i) {
+      if (this.moduleObject.env !== 'production') {
+        return;
+      }
+      this.customFunctionHandle(f.customFunction, {
+        rowData: item,
+        rowIndex: index,
+        cellIndex: i,
+        cellKey: f.key,
+        data: this.data
+      })
     },
     /**
      * 提供父级组件调用的刷新prop数据组件
@@ -209,6 +228,8 @@ export default {
       // this.initData();
       this.convertAttrToStyleObject();
       this.convertThemeListAttrToStyleObject();
+      this.convertCellAttrToStyleObject();
+      this.convertSignAttrToStyleObject();
       this.resizeContentWrapperHeight();
     },
     resizeContentWrapperHeight(wrapperHeight, wrapperWidth) {
@@ -258,7 +279,11 @@ export default {
           break;
         case 'pageResize':
           this.currentEquipWidth = messageObject.message?.width;
-          this.convertAttrToStyleObject();
+          if (this.propData.enableFontAdaptation) {
+            this.convertAttrToStyleObject();
+            this.convertCellAttrToStyleObject();
+            this.convertSignAttrToStyleObject();
+          }
           break;
         case 'regionResize':
           if (messageObject.message && messageObject.message.gridEleTarget) {
@@ -875,11 +900,11 @@ export default {
               border: 1px solid rgba(0,145,255,1);
               border-radius: 2px;
               padding: 0 5px;
-              /* margin: 0 5px; */
+              margin-right: 5px;
             }
 
             .icon {
-              /* margin: 0 5px; */
+              margin-right: 5px;
               color: #999999;
               .idm_filed_svg_icon {
                 font-size: 1em;
