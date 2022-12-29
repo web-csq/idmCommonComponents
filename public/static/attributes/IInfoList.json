@@ -1145,29 +1145,6 @@
               "default": "1.2"
             }
           ]
-        },
-        {
-          "type": "select",
-          "layoutType": "inline",
-          "text": "刷新KEY",
-          "bindKey": "messageRefreshKey",
-          "desc": "根据组件接收到的消息KEY来刷新数据",
-          "default": "",
-          "multiple": true,
-          "placeholder": "示例：inbox,info",
-          "ctrlAttrObject": {
-            "mode": "tags"
-          },
-          "dictionary": [
-            {
-              "label": "inbox",
-              "value": "inbox"
-            },
-            {
-              "label": "info",
-              "value": "info"
-            }
-          ]
         }
       ]
     }

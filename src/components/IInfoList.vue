@@ -50,8 +50,8 @@
         class="i-infoList-content-list"
         v-show="data && data.length"
         v-infinite-scroll="initData"
-        :infinite-scroll-disabled="end"
-        :infinite-scroll-distance="10"
+        infinite-scroll-disabled="busy"
+        infinite-scroll-distance="10"
       >
         <div class="i-infoList-row" v-for="item,index in data" :key="index" @click="onRowClick(item, index)">
           <div :class="`i-infoList-cell i-infoList-cell-${f.key}`" v-for="f,i in propData.cellsList" :key="i" @click="onCellClick(item, index, f, i)">
@@ -93,7 +93,7 @@
         <div class="i-infoList-content-loading" v-show="loading" v-if="propData.loadingDesc">
           <div>{{propData.loadingDesc}}</div>
         </div>
-        <div class="i-infoList-content-end" v-show="end" v-if="propData.endDesc">
+        <div class="i-infoList-content-end" v-show="busy && !loading" v-if="propData.endDesc">
           <div>{{propData.endDesc}}</div>
         </div>
       </div>
@@ -113,7 +113,6 @@ const devResult = () => {
       time: '2022-12-07'
     })
   }
-  arr[3].showzt = true;
   return arr;
 }
 import infiniteScroll from 'vue-infinite-scroll';
@@ -148,7 +147,7 @@ export default {
         // }]
       },
       loading: false,
-      end: false,
+      busy: false,
       pageIndex: 1,
       data: [],
     };
@@ -156,12 +155,15 @@ export default {
   props: {},
   watch: {
     'propData.dataSource': {
-      handler(value) {
-        this.data = [];
-        this.end = false;
-        this.initData();
+      handler(newValue, oldValue) {
+        if (this.moduleObject.env !== 'production' && ((newValue && newValue[0]?.id) != (oldValue && oldValue[0]?.id))) {
+          this.data = [];
+          this.busy = false;
+          // this.initData();
+        }
       },
-      deep: true
+      deep: true,
+      immediate: false
     }
   },
   computed: {
@@ -180,7 +182,7 @@ export default {
     this.convertCellAttrToStyleObject();
     this.convertSignAttrToStyleObject();
     this.resizeContentWrapperHeight();
-    this.initData();
+    // this.initData();
   },
   methods: {
     onMoreClick(){
@@ -264,21 +266,10 @@ export default {
      */
     receiveBroadcastMessage(messageObject) {
       switch (messageObject.type) {
-        case 'websocket':
-          if (this.propData.messageRefreshKey && messageObject.message) {
-            const messageData =
-              (typeof messageObject.message === 'string' && JSON.parse(messageObject.message)) ||
-              messageObject.message;
-            const arr = Array.isArray(this.propData.messageRefreshKey)
-              ? this.propData.messageRefreshKey
-              : [this.propData.messageRefreshKey];
-            if (messageData.badgeType && arr.includes(messageData.badgeType)) {
-              this.initData();
-            }
-          }
-          break;
         case 'linkageReload':
-          this.initData();
+          this.data = [];
+          this.busy = false;
+          // this.initData();
           break;
         case 'pageResize':
           this.currentEquipWidth = messageObject.message?.width;
@@ -367,25 +358,28 @@ export default {
       if (this.propData.dataType !== 'dataSource' || !this.propData.dataSource || !this.propData.dataSource[0]?.id) {
         if (this.moduleObject.env !== 'production') {
           this.data = devResult();
-          this.end = true;
+          this.busy = true;
         }
         return;
       }
       this.loading = true
+      this.busy = true
       IDM.datasource.request(this.propData.dataSource[0]?.id, {
         moduleObject: this.moduleObject,
         param: {
           pageIndex: this.pageIndex,
         }
       }, (data) => {
-        this.loading = false
-        if (data) {
-          this.data = [...this.data, ...data.data];
-          this.pageIndex = this.pageIndex + 1;
-          this.data.length >= data.total ? this.end = true : this.end = false;
+        this.loading = false;
+        const listData = data && data.data ? data.data : [];
+        this.data = [...this.data, ...listData];
+        this.pageIndex = this.pageIndex + 1;
+        if (data.total && data.total > this.data.length) {
+          this.busy = false
         }
       }, (err) => {
         this.loading = false
+        this.busy = false
       })
     },
     getClientWidth() {
@@ -878,7 +872,7 @@ export default {
         width: 1em;
         height: 1em;
         fill: currentColor;
-        /* vertical-align: -0.15em; */
+        vertical-align: -0.15em;
         outline: none;
       }
     }
@@ -942,7 +936,7 @@ export default {
                 width: 1em;
                 height: 1em;
                 fill: currentColor;
-                /* vertical-align: -0.15em; */
+                vertical-align: -0.15em;
                 outline: none;
               }
             }
