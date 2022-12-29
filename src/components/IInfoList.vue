@@ -655,7 +655,7 @@ export default {
           '.' +
             themeNamePrefix +
             item.key +
-            ' .i-infoList-outer .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area,.right-area .tag',
+            ' .i-infoList-outer .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area .tag',
           {
             color: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : '',
             'border-color': item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
@@ -665,7 +665,24 @@ export default {
           '.' +
             themeNamePrefix +
             item.key +
-            ' .i-infoList-outer .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area,.right-area .icon',
+            ' .i-infoList-outer .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .right-area .tag',
+          {
+            color: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : '',
+            'border-color': item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''
+          }
+        );
+        IDM.setStyleToPageHead(
+          '.' +
+            themeNamePrefix +
+            item.key +
+            ' .i-infoList-outer .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area .icon',
+          {color: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''}
+        );
+        IDM.setStyleToPageHead(
+          '.' +
+            themeNamePrefix +
+            item.key +
+            ' .i-infoList-outer .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .right-area .icon',
           {color: item.mainColor ? IDM.hex8ToRgbaString(item.mainColor.hex8) : ''}
         );
         // IDM.setStyleToPageHead(
