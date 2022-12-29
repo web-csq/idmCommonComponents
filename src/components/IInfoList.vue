@@ -71,7 +71,7 @@
                 </template>
               </template>
             </div>
-            <div class="text">{{f.textFiled ? f.textFiled.includes("@[") ? IDM.express.replace(f.textFiled, item, true) : getExpressData('data', f.textFiled, item) : item}}</div>
+            <div :class="{'text': true, 'text-ellipsis': !f.textWrap}">{{f.textFiled ? f.textFiled.includes("@[") ? IDM.express.replace(f.textFiled, item, true) : getExpressData('data', f.textFiled, item) : item}}</div>
             <div v-if="rightSignsList && rightSignsList.length" class="right-area">
               <template v-for="s,j in rightSignsList">
                 <template v-if="s.key == f.key && (s.compareField ? s.compareValue ? item[s.compareField] == s.compareValue : item[s.compareField] : true)">
@@ -910,6 +910,9 @@ export default {
           display: flex;
 
           .text {
+          }
+
+          .text-ellipsis {
             white-space: nowrap;
             text-overflow: ellipsis;
             overflow: hidden;

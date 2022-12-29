@@ -237,6 +237,13 @@
               "desc": "单位px，%或auto。具体宽度会根据行宽放大或缩小"
             },
             {
+              "type": "switch",
+              "layoutType": "inline",
+              "text": "允许换行",
+              "bindKey": "textWrap",
+              "default": false
+            },
+            {
               "type": "radio",
               "layoutType": "inline",
               "text": "对齐方式",
