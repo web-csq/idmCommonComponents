@@ -772,11 +772,19 @@ export default {
           }
         }
         window.IDM.setStyleToPageHead(
-          this.moduleObject.packageid + ' #' + this.moduleObject.id + ` .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area,.right-area .tag-${sign.key}`,
+          this.moduleObject.packageid + ' #' + this.moduleObject.id + ` .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area .tag-${sign.key}`,
           tagStyleObject
         );
         window.IDM.setStyleToPageHead(
-          this.moduleObject.packageid + ' #' + this.moduleObject.id + ` .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area,.right-area .icon-${sign.key}`,
+          this.moduleObject.packageid + ' #' + this.moduleObject.id + ` .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .right-area .tag-${sign.key}`,
+          tagStyleObject
+        );
+        window.IDM.setStyleToPageHead(
+          this.moduleObject.packageid + ' #' + this.moduleObject.id + ` .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .left-area .icon-${sign.key}`,
+          iconStyleObject
+        );
+        window.IDM.setStyleToPageHead(
+          this.moduleObject.packageid + ' #' + this.moduleObject.id + ` .i-infoList-content .i-infoList-content-list .i-infoList-row .i-infoList-cell .right-area .icon-${sign.key}`,
           iconStyleObject
         );
       }

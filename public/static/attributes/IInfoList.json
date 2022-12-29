@@ -368,7 +368,7 @@
               "text": "图标大小",
               "bindKey": "iconSize",
               "display": "@[type=='icon']",
-              "default": 12
+              "default": 14
             },
             {
               "type": "colorPicker",
