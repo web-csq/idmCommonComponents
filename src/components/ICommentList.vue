@@ -66,7 +66,8 @@ export default {
       content: '',
       hasMore: false,
       currentPage: 1,
-      userInfo: IDM.user.getCurrentUserInfo()
+      userInfo: IDM.user.getCurrentUserInfo(),
+      messageParams: {}
     }
   },
   computed: {
@@ -125,6 +126,7 @@ export default {
         type: 'list',
         params: {
           ...this.commonParam(),
+          ...this.getCustomFunctionParams(),
           showLike: this.propData.isFabulousNumber,
           page: this.currentPage,
           commentId: item.id,
@@ -166,6 +168,7 @@ export default {
         type,
         params: {
           ...this.commonParam(),
+          ...this.getCustomFunctionParams(),
           commentId: item.id,
         }
       }).then(res => {
@@ -198,6 +201,7 @@ export default {
             type: 'delete',
             params: {
               ...this.commonParam(),
+              ...this.getCustomFunctionParams(),
               commentId: item.id,
             }
           }).then(res => {
@@ -236,6 +240,7 @@ export default {
         type: 'submit',
         params: {
           ...this.commonParam(),
+          ...this.getCustomFunctionParams(),
           content,
           commentId
         }
@@ -384,6 +389,14 @@ export default {
       this.currentPage++
       this.getCommentList()
     },
+    getCustomFunctionParams() {
+      let obj = []
+      const func = this.propData?.customParamFunction?.[0]
+      if(func) {
+        obj = window?.[func.name]?.call(this, func.param)
+      }
+      return obj
+    },
     setIsReplyFalse(array) {
       return array.map((el) => {
         el.isReply = false
@@ -398,6 +411,8 @@ export default {
         type: 'list',
         params: {
           ...this.commonParam(),
+          ...this.getCustomFunctionParams(),
+          ...this.messageParams,
           showLike: this.propData.isFabulousNumber,
           page: this.currentPage,
           showNum: this.propData.showNum,
@@ -438,10 +453,12 @@ export default {
     },
     receiveBroadcastMessage(object) {
       console.log('组件收到消息', object)
-      if (object.type && object.type == 'linkageShowModule') {
-        this.showThisModuleHandle()
-      } else if (object.type && object.type == 'linkageHideModule') {
-        this.hideThisModuleHandle()
+      switch(object.type) {
+        case 'linkageReload':
+          this.messageParams = object.message || {}
+          this.initData()
+          break
+
       }
     },
     setContextValue(object) {

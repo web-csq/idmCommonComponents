@@ -528,6 +528,14 @@
                     "text": "数据源",
                     "bindKey": "dataSource",
                     "desc": "组件数据源，详细用法见文档"
+                },
+                {
+                    "type": "actionSelect",
+                    "layoutType": "block",
+                    "text": "自定义参数函数",
+                    "bindKey": "customParamFunction",
+                    "desc": "自定义参数函数，返回的对象则会被合并到数据源参数中",
+                    "multiple": false
                 }
             ]
         }
