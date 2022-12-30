@@ -412,7 +412,7 @@ export default {
         params: {
           ...this.commonParam(),
           ...this.getCustomFunctionParams(),
-          ...this.messageParams,
+          messageParams: this.messageParams,
           showLike: this.propData.isFabulousNumber,
           page: this.currentPage,
           showNum: this.propData.showNum,
@@ -454,7 +454,7 @@ export default {
     receiveBroadcastMessage(object) {
       console.log('组件收到消息', object)
       switch(object.type) {
-        case 'linkageReload':
+        case 'stickyTreeKeysChange':
           this.messageParams = object.message || {}
           this.initData()
           break
