@@ -52,6 +52,13 @@
       "className": "IInfoList",
       "comType": "common",
       "comLangue": "vue"
+    },
+    {
+      "classId": "idm.component.idmCommonComponent.blockStatistics",
+      "comName": "统计方块",
+      "className": "IBlockStatistics",
+      "comType": "common",
+      "comLangue": "vue"
     }
   ]
 }

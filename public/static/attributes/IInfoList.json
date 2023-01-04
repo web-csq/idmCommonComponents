@@ -1109,14 +1109,6 @@
           "multiple": false
         },
         {
-          "type": "actionSelect",
-          "layoutType": "block",
-          "text": "参数自定义函数",
-          "bindKey": "paramsCustomFunction",
-          "desc": "用于向数据源添加自定义传参，请返回处理后的参数对象，注意此对象会替换掉原有参数，而非合并。此函数的参数为{commonParam: 组件信息, customParam: 用户自定义参数, params：组件的原有参数，包含以消息方式传入的参数}",
-          "multiple": false
-        },
-        {
           "type": "group",
           "text": "适配设置",
           "desc": "通过设置属性来适配移动端页面尺寸",
