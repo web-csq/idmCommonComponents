@@ -19,7 +19,7 @@
       <template v-for="block,index in propData.blockList">
         <div
           :key="index"
-          :class="`i-blockStatistics-content-block i-blockStatistics-content-block-${index}`"
+          :class="`i-blockStatistics-content-block i-blockStatistics-content-block-${block.dataFiled}`"
           :style="{'margin-right': !propData.blockSpace ? 0 : undefined, width: !propData.blockWidth ? 'auto' : propData.blockWidth + 'px', 'flex-grow': !propData.blockWidth ? 1 : 0}"
           v-if="block.dataFiled && (getExpressData('data', block.dataFiled, data) || getExpressData('data', block.dataFiled, data) === 0)"
           @click="onBlockClick(getExpressData('data', block.dataFiled, data), block.dataFiled)"
