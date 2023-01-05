@@ -50,6 +50,7 @@ export default {
       currentEquipWidth: 0,
       moduleHeight: 0,
       propData: this.$root.propData.compositeAttr || {
+        defaultInitData: true,
         blockWidth: 135,
         blockSpace: 10,
         blockList: [{
@@ -130,7 +131,11 @@ export default {
     this.convertAttrToStyleObject();
     this.convertBlockAttrToStyleObject();
     this.resizeContentWrapperHeight();
-    this.propData.defaultInitData && this.initData();
+    if (this.moduleObject.env == 'production') {
+      this.propData.defaultInitData && this.initData();
+    } else {
+      this.initData();
+    }
   },
   methods: {
     getElementData(dataFiled, elementFiled) {
