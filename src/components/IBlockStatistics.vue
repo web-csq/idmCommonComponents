@@ -26,7 +26,7 @@
         >
           <div class="name">{{block.nameType == 'dataSource' ? getElementData(block.dataFiled, block.nameFiled) : block.name}}</div>
           <div class="count">
-            <span class="num">{{block.countFiled ? getElementData(block.dataFiled, block.countFiled) : getExpressData('data', block.dataFiled, data)}}</span>
+            <span class="num">{{block.countFiled ? block.countFiled.includes("@[") ? IDM.express.replace(block.countFiled, getExpressData('data', block.dataFiled, data), true) : getElementData(block.dataFiled, block.countFiled) : getExpressData('data', block.dataFiled, data)}}</span>
             <span v-if="block.unitName" class="unit">{{block.unitName}}</span>
           </div>
         </div>
